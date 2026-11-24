@@ -449,19 +449,18 @@ ob_start();
     <!-- Cabecera Superior Azul Marino Estandarizada -->
     <table class="cabecera-pdf">
         <tr>
-            <td style="width: 65%;">
-                <div class="cabecera-marca-tag">✚ SMARTMED CONSULTORIO &bull; DOCUMENTO OFICIAL</div>
+            <td style="width: 70%;">
+                <div class="cabecera-marca-tag">✚ SMARTMED CONSULTORIO</div>
                 <div class="cabecera-titulo"><?= htmlspecialchars($tituloReporte, ENT_QUOTES, 'UTF-8') ?></div>
                 <div class="cabecera-subtitulo"><?= htmlspecialchars($subtituloReporte, ENT_QUOTES, 'UTF-8') ?></div>
                 <?php if (!empty($contextoReporte)): ?>
                     <div class="cabecera-contexto"><?= $contextoReporte ?></div>
                 <?php endif; ?>
             </td>
-            <td style="width: 35%; text-align: right;">
+            <td style="width: 30%; text-align: right;">
                 <div class="cabecera-meta-caja">
-                    <span style="color: #BAE6FD; font-weight: bold;">EMISIÓN:</span><br>
-                    <strong><?= $fechaEmision ?></strong><br>
-                    <span style="font-size: 6.5pt; color: #E0F2FE;">Certificación Digital SmartMed Web</span>
+                    <span style="color: #BAE6FD; font-weight: bold; font-size: 7pt;">FECHA DE EMISIÓN:</span><br>
+                    <strong><?= $fechaEmision ?></strong>
                 </div>
             </td>
         </tr>

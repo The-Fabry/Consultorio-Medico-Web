@@ -1,13 +1,12 @@
 <?php
 /**
  * cabecera_reporte.php
- * Para qué sirve: Componente reutilizable que renderiza la cabecera superior unificada
- *                 para reportes, comprobantes, recetas e historiales clínicos.
+ * Para qué sirve: Cabecera superior unificada, limpia y profesional para reportes e historiales clínicos.
  * Parámetros esperados:
- * - $tituloReporte: Nombre oficial del reporte (ej. "SMARTMED - HISTORIAL CLÍNICO")
- * - $subtituloReporte: Explicación breve (ej. "Expediente médico de consultas, diagnósticos y notas de evolución")
- * - $contextoReporte: Alcance o filtro activo (ej. paciente específico, médico en sesión, período de fechas)
- * - $codigoEmision: (Opcional) Código identificador o comprobante
+ * - $tituloReporte: Nombre oficial del reporte (ej. "SMARTMED - REPORTE DE CITAS")
+ * - $subtituloReporte: Explicación breve (ej. "Control y auditoría de citas médicas, especialidades y estados de atención")
+ * - $contextoReporte: Alcance o filtro activo (ej. médico en sesión, fechas o datos del paciente)
+ * - $codigoEmision: (Opcional) Código identificador
  */
 
 $fechaEmisionActual = date('d/m/Y H:i');
@@ -19,7 +18,6 @@ $fechaEmisionActual = date('d/m/Y H:i');
             <div class="cabecera-reporte-marca">
                 <span class="cabecera-reporte-logo-simbolo">✚</span>
                 <span class="cabecera-reporte-marca-nombre">SMARTMED CONSULTORIO</span>
-                <span class="cabecera-reporte-tag">DOCUMENTO OFICIAL</span>
             </div>
             <h1 class="cabecera-reporte-titulo"><?= htmlspecialchars($tituloReporte ?? 'SMARTMED - REPORTE CLÍNICO', ENT_QUOTES, 'UTF-8') ?></h1>
             <p class="cabecera-reporte-subtitulo"><?= htmlspecialchars($subtituloReporte ?? 'Sistema Integral de Gestión Médica', ENT_QUOTES, 'UTF-8') ?></p>
@@ -31,7 +29,7 @@ $fechaEmisionActual = date('d/m/Y H:i');
             <?php endif; ?>
         </div>
 
-        <!-- Lado Derecho: Metadatos de Emisión, Fecha y Código -->
+        <!-- Lado Derecho: Metadatos de Emisión -->
         <div class="cabecera-reporte-meta">
             <div class="cabecera-reporte-caja-meta">
                 <div class="cabecera-reporte-fila-meta">
@@ -39,14 +37,11 @@ $fechaEmisionActual = date('d/m/Y H:i');
                     <strong class="cabecera-reporte-val"><?= $fechaEmisionActual ?></strong>
                 </div>
                 <?php if (!empty($codigoEmision)): ?>
-                    <div class="cabecera-reporte-fila-meta" style="margin-top: 6px;">
-                        <span class="cabecera-reporte-lbl">CÓDIGO DE REGISTRO:</span>
+                    <div class="cabecera-reporte-fila-meta" style="margin-top: 5px;">
+                        <span class="cabecera-reporte-lbl">CÓDIGO:</span>
                         <code class="cabecera-reporte-codigo"><?= htmlspecialchars($codigoEmision, ENT_QUOTES, 'UTF-8') ?></code>
                     </div>
                 <?php endif; ?>
-                <div class="cabecera-reporte-seguridad">
-                    <span>Certificación Digital SmartMed Web</span>
-                </div>
             </div>
         </div>
     </div>

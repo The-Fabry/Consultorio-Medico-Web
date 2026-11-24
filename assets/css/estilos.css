@@ -1124,16 +1124,17 @@ a:hover {
 /* =============================================================================
    14. CABECERA UNIFICADA DE REPORTES Y ESTILOS DE IMPRESIÓN (@media print)
    ============================================================================= */
-/* Cabecera Azul Marino Estandarizada para Reportes e Impresiones */
+/* Cabecera Azul Marino Estandarizada para Reportes */
 .cabecera-reporte-unificada {
     background: linear-gradient(135deg, #0F355C 0%, #0F4C81 100%);
     color: #FFFFFF;
     border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 22px;
+    padding: 22px 28px;
+    margin-bottom: 20px;
     box-shadow: 0 4px 14px rgba(15, 76, 129, 0.12);
     border: 1px solid #1E40AF;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .cabecera-reporte-grid {
@@ -1141,12 +1142,12 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 18px;
 }
 
 .cabecera-reporte-info {
     flex: 1;
-    min-width: 280px;
+    min-width: 300px;
 }
 
 .cabecera-reporte-marca {
@@ -1176,19 +1177,9 @@ a:hover {
     color: #BAE6FD;
 }
 
-.cabecera-reporte-tag {
-    font-size: 0.65rem;
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.15);
-    color: #FFFFFF;
-    padding: 2px 7px;
-    border-radius: 10px;
-    letter-spacing: 0.8px;
-}
-
 .cabecera-reporte-titulo {
     color: #FFFFFF;
-    font-size: 1.4rem;
+    font-size: 1.45rem;
     font-weight: 800;
     letter-spacing: 0.5px;
     margin: 0 0 4px 0;
@@ -1196,7 +1187,7 @@ a:hover {
 
 .cabecera-reporte-subtitulo {
     color: #E0F2FE;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     margin: 0 0 8px 0;
     line-height: 1.4;
 }
@@ -1204,11 +1195,12 @@ a:hover {
 .cabecera-reporte-contexto {
     background: rgba(255, 255, 255, 0.12);
     border-left: 3px solid #38BDF8;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.84rem;
     color: #F0F9FF;
     display: inline-block;
+    margin-top: 4px;
 }
 
 .cabecera-reporte-meta {
@@ -1217,20 +1209,20 @@ a:hover {
 
 .cabecera-reporte-caja-meta {
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 10px 16px;
     border-radius: 8px;
     display: inline-block;
     text-align: right;
 }
 
 .cabecera-reporte-fila-meta {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
 }
 
 .cabecera-reporte-lbl {
     color: #BAE6FD;
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.8px;
     margin-right: 4px;
@@ -1249,11 +1241,36 @@ a:hover {
     font-size: 0.82rem;
 }
 
-.cabecera-reporte-seguridad {
-    margin-top: 5px;
-    font-size: 0.68rem;
-    color: #94A3B8;
-    letter-spacing: 0.5px;
+/* Barra de acciones de reportes (Exportación Dompdf) */
+.reportes-barra-acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reportes-acciones-texto {
+    color: #475569;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.btn-reporte-pdf {
+    padding: 10px 20px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(14, 165, 164, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 @media print {
