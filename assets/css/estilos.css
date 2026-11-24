@@ -398,10 +398,10 @@ a:hover {
 }
 
 /* =============================================================================
-   10. PANTALLAS DE LOGIN Y REGISTRO
+   10. PANTALLAS DE LOGIN Y REGISTRO (SPLIT-SCREEN MODERNO)
    ============================================================================= */
 .tarjeta-auth {
-    max-width: 420px;
+    max-width: 480px;
     margin: 40px auto;
     background: #FFFFFF;
     border: 1px solid var(--color-borde);
@@ -431,6 +431,358 @@ a:hover {
     margin-top: 18px;
     font-size: 0.88rem;
     color: var(--color-texto-muted);
+}
+
+/* =============================================================================
+   ESTILOS DE LOGIN SPLIT-SCREEN (PANTALLA DIVIDIDA)
+   ============================================================================= */
+.login-split-contenedor {
+    max-width: 1040px;
+    margin: 30px auto;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.login-split-tarjeta {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 45px -10px rgba(15, 76, 129, 0.18), 0 0 1px 1px rgba(15, 76, 129, 0.05);
+    border: 1px solid #E2E8F0;
+    min-height: 580px;
+}
+
+/* PANEL IZQUIERDO: Branding y Bienvenida con Gradiente Clínico */
+.login-panel-marca {
+    position: relative;
+    background: linear-gradient(145deg, #0f355c 0%, #1e6091 55%, #0284c7 100%);
+    color: #FFFFFF;
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+/* Formas y ondas fluidas sutiles en el fondo */
+.login-marca-fondo-formas {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.login-marca-contenido {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+/* Logotipo en panel izquierdo con caja traslúcida elegante */
+.login-marca-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.login-logo-img {
+    height: 64px;
+    width: auto;
+    background: #FFFFFF;
+    padding: 8px 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    object-fit: contain;
+}
+
+.login-marca-subtitulo-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #BAE6FD;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.login-marca-titulo {
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin: 0 0 14px 0;
+}
+
+.login-marca-destaque {
+    color: #7DD3FC;
+    background: linear-gradient(90deg, #7DD3FC 0%, #E0F2FE 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.login-marca-descripcion {
+    font-size: 0.96rem;
+    line-height: 1.6;
+    color: #E2E8F0;
+    margin: 0;
+    max-width: 420px;
+}
+
+.login-marca-pie {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.login-marca-icono {
+    font-size: 1.6rem;
+    background: rgba(255, 255, 255, 0.15);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.login-marca-pie strong {
+    font-size: 0.88rem;
+    display: block;
+    color: #FFFFFF;
+}
+
+.login-marca-pie p {
+    font-size: 0.78rem;
+    color: #BAE6FD;
+    margin: 2px 0 0 0;
+}
+
+/* PANEL DERECHO: Formulario de Acceso Luminoso y Elegante */
+.login-panel-formulario {
+    padding: 44px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+}
+
+.login-formulario-interior {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form-cabecera {
+    margin-bottom: 22px;
+}
+
+.login-form-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #0284C7;
+    background: #E0F2FE;
+    padding: 3px 9px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.login-form-cabecera h2 {
+    color: #0F172A;
+    font-size: 1.65rem;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+}
+
+.login-form-cabecera p {
+    color: #64748B;
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+.login-form-cuerpo {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-input {
+    height: 44px;
+    font-size: 0.95rem;
+    padding: 8px 14px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.login-input:focus {
+    border-color: #0284C7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    outline: none;
+}
+
+/* Selector de Perfil Rápido */
+.login-roles-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.login-rol-item input[type="radio"] {
+    display: none;
+}
+
+.login-rol-boton {
+    display: block;
+    text-align: center;
+    padding: 6px 4px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #475569;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-rol-boton:hover {
+    border-color: #94A3B8;
+    background: #F1F5F9;
+}
+
+.login-rol-item input[type="radio"]:checked + .login-rol-boton {
+    background: #0284C7;
+    border-color: #0284C7;
+    color: #FFFFFF;
+}
+
+/* Opciones de recordar sesión */
+.login-form-opciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0 18px 0;
+}
+
+.login-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.83rem;
+    color: #475569;
+    cursor: pointer;
+    user-select: none;
+}
+
+.login-checkbox-label input[type="checkbox"] {
+    accent-color: #0284C7;
+    cursor: pointer;
+}
+
+/* Botón principal de login con gradiente y elevación */
+.btn-login-ingresar {
+    width: 100%;
+    height: 46px;
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.96rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-login-ingresar:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #075985 100%);
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-login-ingresar:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+
+/* Pie del formulario */
+.login-form-pie {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #F1F5F9;
+    font-size: 0.88rem;
+    color: #64748B;
+}
+
+.login-enlace-registro {
+    color: #0284C7;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+    transition: color 0.2s;
+}
+
+.login-enlace-registro:hover {
+    color: #0369A1;
+    text-decoration: underline;
+}
+
+/* Adaptación responsive para pantallas pequeñas o móviles */
+@media (max-width: 860px) {
+    .login-split-tarjeta {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .login-panel-marca {
+        padding: 32px 24px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .login-marca-contenido {
+        align-items: center;
+    }
+
+    .login-marca-logo {
+        justify-content: center;
+    }
+
+    .login-marca-titulo {
+        font-size: 1.7rem;
+    }
+
+    .login-marca-pie {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .login-panel-formulario {
+        padding: 32px 24px;
+    }
 }
 
 /* =============================================================================
