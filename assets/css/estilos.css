@@ -130,10 +130,11 @@ a:hover {
 
 .contenedor-principal {
     flex-grow: 1;
-    max-width: 1200px;
+    max-width: 100%;
     width: 100%;
-    margin: 0 auto;
-    padding: 24px 16px;
+    margin: 0;
+    padding: 20px 28px;
+    box-sizing: border-box;
 }
 
 .pie-pagina {
@@ -602,21 +603,22 @@ a:hover {
 /* =============================================================================
    13. MÓDULO MÉDICO Y RECETA OFICIAL
    ============================================================================= */
-/* Contenedor de ancho medio centrado para la vista de atención médica */
+/* Contenedor de ancho completo fluido con respiro visual para la atención médica */
 .contenedor-atencion {
-    max-width: 980px;
-    margin: 0 auto;
+    max-width: 100%;
     width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .atencion-grilla {
     display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    gap: 22px;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
     align-items: start;
 }
 
-@media (max-width: 880px) {
+@media (max-width: 960px) {
     .atencion-grilla { grid-template-columns: 1fr; }
 }
 
@@ -656,6 +658,22 @@ a:hover {
     margin-bottom: 18px;
     font-size: 0.9rem;
     line-height: 1.55;
+}
+
+/* Área de texto ampliada para Diagnóstico Clínico cómodo sin scroll constante */
+.diagnostico-textarea {
+    min-height: 190px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    resize: vertical;
+}
+
+/* Área de texto de notas de evolución con buen respiro */
+.notas-textarea {
+    min-height: 100px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    resize: vertical;
 }
 
 /* Bloque limpio y profesional de prescripción farmacológica en texto libre */
