@@ -1122,51 +1122,136 @@ a:hover {
 }
 
 /* =============================================================================
-   14. ESTILOS DE IMPRESIÓN LIMPIA (@media print)
+   14. ESTILOS DE IMPRESIÓN OFICIAL Y FIEL (@media print)
    ============================================================================= */
 @media print {
+    /* Forzar impresión de colores exactos y fondos en todos los navegadores */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Ocultar elementos irrelevantes para la impresión */
     .no-print,
     .topbar-clinica,
     .pie-pagina,
     .btn,
-    .alerta {
+    .alerta,
+    header,
+    footer,
+    nav {
         display: none !important;
+    }
+
+    @page {
+        margin: 1.2cm auto;
+        size: auto;
     }
 
     body {
         background: #FFFFFF !important;
-        color: #000000 !important;
-        font-size: 12pt;
+        color: #0F172A !important;
+        font-size: 11pt;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     .contenedor-principal {
-        margin: 0 !important;
+        margin: 0 auto !important;
         padding: 0 !important;
         max-width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
     }
 
-    .tarjeta-ticket, .hoja-receta, .tarjeta {
-        border: 1px solid #000000 !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
+    /* Ticket Digital Imprimible: Conserva fielmente el diseño, colores y bordes */
+    .tarjeta-ticket {
+        max-width: 440px !important;
+        width: 100% !important;
         margin: 0 auto !important;
+        background: #FFFFFF !important;
+        border: 1.5px solid #CBD5E1 !important;
+        border-radius: var(--radio-tarjeta) !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
     .ticket-cabecera {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border-bottom: 2px solid #000000 !important;
+        background: #0F4C81 !important;
+        color: #FFFFFF !important;
+        text-align: center !important;
+        padding: 18px 20px !important;
+        border-bottom: none !important;
     }
 
-    .ticket-cabecera h2, .ticket-cabecera p { color: #000000 !important; }
+    .ticket-cabecera h2 {
+        color: #FFFFFF !important;
+        font-size: 1.35rem !important;
+        margin: 0 0 4px 0 !important;
+    }
+
+    .ticket-cabecera p {
+        color: #BAE6FD !important;
+        font-size: 0.84rem !important;
+        margin: 0 !important;
+    }
+
+    .ticket-cuerpo {
+        padding: 18px 20px !important;
+        background: #FFFFFF !important;
+    }
+
+    .ticket-fila {
+        display: flex !important;
+        justify-content: space-between !important;
+        margin-bottom: 9px !important;
+        padding-bottom: 6px !important;
+        border-bottom: 1px dashed #CBD5E1 !important;
+        font-size: 0.92rem !important;
+    }
+
+    .ticket-etiqueta {
+        color: #64748B !important;
+    }
+
+    /* Área del código de barras nítido y contenedor inferior */
+    .ticket-codigo-box {
+        text-align: center !important;
+        padding: 14px 12px !important;
+        background: #F8FAFC !important;
+        border-top: 2px dashed #CBD5E1 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    #barcode {
+        max-width: 90% !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
 
     .tabla-clinica th {
         background-color: #E2E8F0 !important;
-        color: #000000 !important;
-        border: 1px solid #000000 !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
     }
 
-    .tabla-clinica td { border: 1px solid #000000 !important; }
+    .tabla-clinica td {
+        border: 1px solid #E2E8F0 !important;
+    }
+
+    /* Hoja de receta médica imprimible */
+    .hoja-receta {
+        box-shadow: none !important;
+        border: 1px solid #CBD5E1 !important;
+        margin: 0 auto !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
 }
 
 
