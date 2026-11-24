@@ -5,10 +5,10 @@
  * Trabaja con: controllers/MedicoController.php.
  * Equivale en NetBeans a: PanelHistorialMedico.java
  * 
- * Estructura visual: Contenedor centrado en espacio medio (max-width: 980px)
- * con dos columnas equilibradas:
- *   - Columna 1: Información del paciente e historial clínico previo.
- *   - Columna 2: Registro del diagnóstico, notas de evolución y prescripción farmacológica integrada.
+ * Estructura visual: Contenedor fluido a pantalla completa con buen respiro interior
+ * y dos columnas de trabajo:
+ *   - Columna 1 (340px): Información del paciente e historial clínico previo.
+ *   - Columna 2 (flexible): Registro del diagnóstico en área ampliada (rows=8), notas de evolución y prescripción farmacológica integrada.
  */
 require_once __DIR__ . '/../header.php';
 
@@ -133,12 +133,12 @@ $indicacionesPrevias = $recetaActual['indicaciones'] ?? '';
                 </div>
 
                 <form action="index.php?ruta=medico/atencion&id=<?= $cita['id_cita'] ?>" method="POST" onsubmit="return confirm('¿Desea registrar el diagnóstico y finalizar la atención médica de esta cita?');">
-                    <!-- Campo obligatorio: Diagnóstico Clínico -->
+                    <!-- Campo obligatorio: Diagnóstico Clínico (Amplio y cómodo para diagnósticos extensos) -->
                     <div class="campo-grupo">
                         <label for="diagnostico" class="campo-etiqueta">
                             Diagnóstico Clínico * <span style="font-weight:normal; font-size:0.8rem; color:#64748B;">(Obligatorio)</span>
                         </label>
-                        <textarea name="diagnostico" id="diagnostico" rows="3" class="campo-control" placeholder="Escriba aquí el diagnóstico clínico del paciente..." required <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($diagnosticoPrevio, ENT_QUOTES, 'UTF-8') ?></textarea>
+                        <textarea name="diagnostico" id="diagnostico" rows="8" class="campo-control diagnostico-textarea" placeholder="Escriba detalladamente el diagnóstico clínico del paciente (evaluación médica, patología, criterios diagnósticos)..." required <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($diagnosticoPrevio, ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
 
                     <!-- Campo opcional: Notas y Observaciones de evolución -->
@@ -146,7 +146,7 @@ $indicacionesPrevias = $recetaActual['indicaciones'] ?? '';
                         <label for="notas" class="campo-etiqueta">
                             Observaciones y Notas de Evolución <span style="font-weight:normal; font-size:0.8rem; color:#64748B;">(Opcional)</span>
                         </label>
-                        <textarea name="notas" id="notas" rows="3" class="campo-control" placeholder="Signos vitales, recomendaciones, antecedentes relevantes..." <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($notasPrevias, ENT_QUOTES, 'UTF-8') ?></textarea>
+                        <textarea name="notas" id="notas" rows="4" class="campo-control notas-textarea" placeholder="Signos vitales, recomendaciones, antecedentes relevantes..." <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($notasPrevias, ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
 
                     <!-- Sección Integrada: Prescripción de Medicamentos en Texto Libre -->
