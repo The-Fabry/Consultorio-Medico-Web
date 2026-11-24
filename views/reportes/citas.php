@@ -15,7 +15,12 @@ $esRango = (!empty($fechaInicio) && !empty($fechaFin));
             <?= $esRango ? 'Reporte de Citas por Rango de Fechas' : 'Reporte General de Citas' ?>
         </h2>
         <p style="color:#64748B; font-size:0.9rem;">
-            <?= $esRango ? "Período: " . date('d/m/Y', strtotime($fechaInicio)) . " al " . date('d/m/Y', strtotime($fechaFin)) : "Todas las citas registradas en el sistema" ?> &bull; Total: <strong><?= count($citas) ?></strong>
+            <?php if (!empty($especialistaActual)): ?>
+                <strong>Filtro aplicado:</strong> Citas asignadas al <?= htmlspecialchars($especialistaActual['nombre_completo'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($especialistaActual['especialidad'], ENT_QUOTES, 'UTF-8') ?>) &bull;
+            <?php else: ?>
+                <strong>Alcance:</strong> Vista general de todo el consultorio (Recepción) &bull;
+            <?php endif; ?>
+            <?= $esRango ? "Período: " . date('d/m/Y', strtotime($fechaInicio)) . " al " . date('d/m/Y', strtotime($fechaFin)) : "Todas las fechas" ?> &bull; Total: <strong><?= count($citas) ?></strong>
         </p>
     </div>
     <div class="no-print">

@@ -8,12 +8,17 @@
 require_once __DIR__ . '/../header.php';
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:12px;">
     <div>
-        <h2 style="color:var(--color-primario);">Mi Agenda Médica</h2>
-        <p style="color:#64748B; font-size:0.9rem;">Pacientes citados para consulta médica. Solo se pueden atender citas "En Proceso".</p>
+        <h2 style="color:var(--color-primario); margin:0 0 4px 0;">Mi Agenda Médica</h2>
+        <p style="color:#64748B; font-size:0.9rem; margin:0;">
+            <?php if (!empty($especialista)): ?>
+                Médico en sesión: <strong><?= htmlspecialchars($especialista['nombre_completo'], ENT_QUOTES, 'UTF-8') ?></strong> (<?= htmlspecialchars($especialista['especialidad'], ENT_QUOTES, 'UTF-8') ?>) &bull; 
+            <?php endif; ?>
+            Mostrando únicamente las citas asignadas a su consulta.
+        </p>
     </div>
-    <a href="index.php?ruta=medico/agenda" class="btn btn-secundario">🔄 Actualizar</a>
+    <a href="index.php?ruta=medico/agenda" class="btn btn-secundario">🔄 Actualizar Agenda</a>
 </div>
 
 <!-- Filtros de búsqueda -->
