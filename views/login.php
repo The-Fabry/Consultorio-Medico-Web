@@ -6,10 +6,10 @@
  * Equivale en NetBeans a: Formulario de Login.java
  * 
  * Estructura de la vista:
- * - Panel Izquierdo (Branding y Bienvenida): Gradiente clínico institucional, logotipo oficial de SmartMed Web,
- *   mensaje de bienvenida y eslogan médico.
- * - Panel Derecho (Formulario de Acceso): Campos limpios para Usuario y Contraseña, selector rápido de perfil,
- *   casilla de recordatorio y botón de acceso directo.
+ * - Panel Izquierdo (Branding y Bienvenida): Logotipo de SmartMed Web amplio y destacado,
+ *   gradiente clínico institucional, bienvenida y eslogan médico.
+ * - Panel Derecho (Formulario de Acceso): Formulario limpio y directo con campos para Usuario y Contraseña,
+ *   casilla de recordarme y botón de ingreso. La determinación de rol se realiza automáticamente en el backend.
  */
 require_once __DIR__ . '/header.php';
 ?>
@@ -23,7 +23,7 @@ require_once __DIR__ . '/header.php';
             <div class="login-marca-fondo-formas"></div>
             
             <div class="login-marca-contenido">
-                <!-- Logotipo de SmartMed Web -->
+                <!-- Logotipo destacado de SmartMed Web (amplio, integrado y sin caja blanca restrictiva) -->
                 <div class="login-marca-logo">
                     <img src="assets/logo.png" alt="Logo SmartMed Web" class="login-logo-img">
                 </div>
@@ -58,9 +58,10 @@ require_once __DIR__ . '/header.php';
                     <p>Ingrese sus credenciales para acceder al consultorio</p>
                 </div>
 
+                <!-- Formulario de acceso directo (autenticación y redirección automática según el rol del usuario) -->
                 <form action="index.php?ruta=login" method="POST" autocomplete="off" class="login-form-cuerpo">
                     
-                    <!-- Campo: Usuario -->
+                    <!-- Campo: Usuario o Correo -->
                     <div class="campo-grupo">
                         <label for="usuario" class="campo-etiqueta">
                             <span class="icono-input">👤</span> Usuario o Correo
@@ -77,27 +78,6 @@ require_once __DIR__ . '/header.php';
                         </label>
                         <div class="input-con-icono">
                             <input type="password" id="password" name="password" class="campo-control login-input" placeholder="••••••••" required>
-                        </div>
-                    </div>
-
-                    <!-- Selector visual de Perfil / Rol sugerido -->
-                    <div class="campo-grupo" style="margin-bottom: 14px;">
-                        <label class="campo-etiqueta" style="font-size: 0.82rem; color: #64748B;">
-                            Tipo de Perfil de Acceso:
-                        </label>
-                        <div class="login-roles-selector">
-                            <label class="login-rol-item">
-                                <input type="radio" name="rol_vista" value="paciente" checked>
-                                <span class="login-rol-boton">👤 Paciente</span>
-                            </label>
-                            <label class="login-rol-item">
-                                <input type="radio" name="rol_vista" value="medico">
-                                <span class="login-rol-boton">🩺 Médico</span>
-                            </label>
-                            <label class="login-rol-item">
-                                <input type="radio" name="rol_vista" value="recepcion">
-                                <span class="login-rol-boton">📋 Recepción</span>
-                            </label>
                         </div>
                     </div>
 
