@@ -36,6 +36,19 @@ class Cliente {
         return $fila ?: null;
     }
 
+    // Busca un cliente por el id del usuario registrado (enlace por cédula de identidad).
+    // Para la defensa: En este sistema, la cuenta de usuario y la ficha del cliente comparten la cédula.
+    // Recibe: id_usuario. Devuelve: arreglo de datos del cliente o null.
+    public function buscarPorIdUsuario(int $idUsuario): ?array {
+        $sql = "SELECT c.* FROM clientes c
+                INNER JOIN usuarios u ON u.cedula = c.cedula
+                WHERE u.id_usuario = ? LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$idUsuario]);
+        $fila = $stmt->fetch();
+        return $fila ?: null;
+    }
+
     // Guarda o actualiza los datos del cliente al agendar si no existía.
     // Recibe: cédula, nombre y teléfono. Devuelve: id_cliente.
     public function sincronizar(array $datos): int {

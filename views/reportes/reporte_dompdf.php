@@ -22,8 +22,8 @@ require_once __DIR__ . '/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-// 1. Control de acceso: Médicos, recepcionistas y administradores pueden exportar reportes
-requerirRol(['medico', 'recepcion', 'admin']);
+// 1. Control de acceso: Médicos, recepcionistas, administradores y pacientes (estos últimos solo sus recetas)
+requerirRol(['medico', 'recepcion', 'admin', 'paciente']);
 
 $usuarioSesion = usuarioActual();
 $rolSesion = $usuarioSesion['rol'] ?? '';
@@ -32,6 +32,11 @@ $pdo = conectarBD();
 // Obtener parámetros de la petición GET
 $tipoReporte = trim($_GET['tipo'] ?? 'citas');
 $fechaEmision = date('d/m/Y H:i');
+
+// Si es paciente, únicamente tiene permitido generar el reporte de su propia receta
+if ($rolSesion === 'paciente' && $tipoReporte !== 'receta') {
+    die('Acceso denegado: no tiene permisos para consultar este reporte.');
+}
 
 // Variables que se llenarán según el tipo de reporte
 $tituloReporte = "SMARTMED - REPORTE OFICIAL";
@@ -244,6 +249,11 @@ switch ($tipoReporte) {
         $receta = $stmt->fetch();
 
         if ($receta) {
+            // Validación de seguridad para paciente: verificar pertenencia de la receta
+            if ($rolSesion === 'paciente' && ($receta['cedula_cliente'] !== ($usuarioSesion['cedula'] ?? ''))) {
+                die('Acceso denegado: no tiene permisos para descargar esta receta médica.');
+            }
+
             $contextoReporte = "Paciente: " . htmlspecialchars($receta['nombre_cliente'], ENT_QUOTES, 'UTF-8') . " (C.I. " . htmlspecialchars($receta['cedula_cliente'], ENT_QUOTES, 'UTF-8') . ") &bull; Médico: " . htmlspecialchars($receta['nombre_especialista'], ENT_QUOTES, 'UTF-8');
             $stmtMeds = $pdo->prepare("SELECT * FROM receta_medicamentos WHERE id_receta = ?");
             $stmtMeds->execute([$idReceta]);

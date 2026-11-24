@@ -253,27 +253,39 @@ class MedicoController {
     }
 
     // Muestra la hoja de receta médica imprimible con código de barras y firma.
+    // Para la defensa:
+    // 1. Permite el acceso tanto al médico tratante, paciente dueño de la receta, recepción o admin.
+    // 2. Si quien consulta es un paciente, valida estrictamente que la receta le pertenezca.
+    // 3. Si un paciente intenta ver la receta de otro usuario, bloquea y redirige con mensaje de seguridad.
     // Recibe: id de la receta por GET. Devuelve: vista receta_imprimible.php.
     public function verReceta(): void {
-        // Puede verla tanto el médico como el paciente que inició sesión
-        requerirRol(['medico', 'paciente']);
+        // Control de acceso: Médicos, pacientes y personal administrativo autorizado
+        requerirRol(['medico', 'paciente', 'recepcion', 'admin']);
+        
         $idReceta = (int)($_GET['id'] ?? 0);
         $receta = $this->recetaModelo->buscarPorId($idReceta);
 
+        // Obtenemos los datos del usuario en sesión
+        $usuario = usuarioActual();
+
+        // Si la receta no existe en la base de datos
         if (!$receta) {
-            guardarFlash('error', 'Receta médica no encontrada.');
-            header('Location: index.php?ruta=login');
+            guardarFlash('error', 'Receta médica no encontrada en el sistema.');
+            $rutaRetorno = ($usuario && $usuario['rol'] === 'paciente') ? 'paciente/recetas' : 'medico/agenda';
+            header('Location: index.php?ruta=' . $rutaRetorno);
             exit;
         }
 
-        // Validación de seguridad para paciente: solo puede ver sus propias recetas
-        $usuario = usuarioAutenticado();
+        // Validación de seguridad para pacientes: solo pueden consultar sus propias recetas
         if ($usuario && $usuario['rol'] === 'paciente') {
             require_once __DIR__ . '/../models/Cliente.php';
             $clienteModelo = new \Cliente();
-            $cliente = $clienteModelo->buscarPorIdUsuario((int) $usuario['id_usuario']);
+            // Buscamos la ficha de cliente asociada a la cédula del usuario en sesión
+            $cliente = $clienteModelo->buscarPorCedula($usuario['cedula'] ?? '');
+            
+            // Si no existe ficha o el id del cliente no coincide con el de la receta, denegamos el acceso
             if (!$cliente || (int)$receta['id_cliente'] !== (int)$cliente['id_cliente']) {
-                guardarFlash('error', 'No tiene permisos para ver esta receta.');
+                guardarFlash('error', 'Acceso denegado: no tiene permisos para ver esta receta médica.');
                 header('Location: index.php?ruta=paciente/recetas');
                 exit;
             }

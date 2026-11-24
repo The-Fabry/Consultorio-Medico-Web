@@ -22,13 +22,22 @@ function usuarioActual(): ?array {
         return null;
     }
     return [
-        'id'       => $_SESSION['usuario_id'],
-        'usuario'  => $_SESSION['usuario_nombre_usuario'],
-        'nombre'   => $_SESSION['usuario_nombre'],
-        'rol'      => $_SESSION['usuario_rol'],
-        'cedula'   => $_SESSION['usuario_cedula'],
-        'telefono' => $_SESSION['usuario_telefono']
+        'id'         => $_SESSION['usuario_id'],
+        'id_usuario' => $_SESSION['usuario_id'], // Alias de compatibilidad por id
+        'usuario'    => $_SESSION['usuario_nombre_usuario'],
+        'nombre'     => $_SESSION['usuario_nombre'],
+        'rol'        => $_SESSION['usuario_rol'],
+        'cedula'     => $_SESSION['usuario_cedula'],
+        'telefono'   => $_SESSION['usuario_telefono']
     ];
+}
+
+// Alias de compatibilidad: devuelve los datos del usuario autenticado en sesión.
+// Para la defensa: Esta función permite que controladores o vistas que llamen a usuarioAutenticado()
+// funcionen sin errores, redirigiendo internamente a usuarioActual().
+// Recibe: nada. Devuelve: arreglo asociativo con los datos o null.
+function usuarioAutenticado(): ?array {
+    return usuarioActual();
 }
 
 // Bloquea el acceso a una pantalla si el usuario no tiene el rol adecuado.

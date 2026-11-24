@@ -12,11 +12,24 @@ $tituloReporte = "SMARTMED - RECETAS MÉDICAS";
 $subtituloReporte = "Prescripción farmacológica oficial, dosificación y recomendaciones terapéuticas";
 $contextoReporte = "Paciente: <strong>" . htmlspecialchars($receta['nombre_cliente'], ENT_QUOTES, 'UTF-8') . "</strong> (C.I. " . htmlspecialchars($receta['cedula_cliente'], ENT_QUOTES, 'UTF-8') . ") &bull; Médico: <strong>" . htmlspecialchars($receta['nombre_especialista'], ENT_QUOTES, 'UTF-8') . "</strong> (" . htmlspecialchars($receta['especialidad'], ENT_QUOTES, 'UTF-8') . ")";
 $codigoEmision = $receta['codigo_receta'];
+
+// Determinamos la ruta de retorno según el perfil del usuario autenticado
+$usuarioSesion = usuarioActual();
+$urlRetorno = 'index.php';
+if ($usuarioSesion) {
+    if ($usuarioSesion['rol'] === 'paciente') {
+        $urlRetorno = 'index.php?ruta=paciente/recetas';
+    } elseif ($usuarioSesion['rol'] === 'medico') {
+        $urlRetorno = 'index.php?ruta=medico/agenda';
+    } elseif ($usuarioSesion['rol'] === 'recepcion') {
+        $urlRetorno = 'index.php?ruta=recepcion/citas';
+    }
+}
 ?>
 
 <!-- Botones de navegación (ocultos al imprimir) -->
 <div class="no-print" style="max-width:760px; margin:0 auto 16px; display:flex; justify-content:space-between; align-items:center;">
-    <a href="javascript:history.back()" class="btn btn-secundario btn-sm">◀ Regresar</a>
+    <a href="<?= $urlRetorno ?>" class="btn btn-secundario btn-sm">◀ Volver</a>
     <button type="button" class="btn btn-primario btn-sm" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
 </div>
 
