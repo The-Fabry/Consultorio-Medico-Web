@@ -1,0 +1,1140 @@
+/* =============================================================================
+   estilos.css
+   Para qué sirve: Único archivo de estilos para todo el sistema SmartMed Web.
+   Trabaja con: views/header.php y todas las pantallas de la aplicación.
+   Equivale en NetBeans a: Configuración del Look & Feel Swing.
+   ============================================================================= */
+
+/* =============================================================================
+   1. VARIABLES DE COLOR (PALETA MÉDICA CLÍNICA)
+   ============================================================================= */
+:root {
+    --color-primario: #0F4C81;        /* Azul clínico principal (botones, títulos y cabeceras) */
+    --color-primario-hover: #0c3d67;  /* Azul oscuro para efecto hover */
+    --color-azul-claro: #E0F2FE;      /* Fondo suave para tarjetas activas y destacados */
+    --color-acento: #0EA5A4;          /* Turquesa / verde agua para detalles y enlaces */
+    --color-exito: #10B981;           /* Verde menta para confirmaciones y citas finalizadas */
+    --color-fondo: #F4F8FB;           /* Fondo general de la página (blanco azulado suave) */
+    --color-superficie: #FFFFFF;      /* Fondo de tarjetas, tablas y formularios */
+    --color-texto: #0F172A;           /* Texto principal de alto contraste */
+    --color-texto-muted: #64748B;     /* Texto secundario para etiquetas y subtítulos */
+    --color-borde: #D6E2EC;           /* Bordes suaves de separación */
+    --color-aviso: #F59E0B;           /* Ámbar para estado En Proceso y advertencias */
+    --color-peligro: #EF4444;         /* Rojo suave para cancelaciones y errores */
+    --radio-borde: 8px;               /* Redondeo estándar para botones e inputs */
+    --radio-tarjeta: 12px;            /* Redondeo para tarjetas y contenedores */
+    --fuente: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* =============================================================================
+   2. RESET Y TIPOGRAFÍA GENERAL
+   ============================================================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--fuente);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.5;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--color-primario);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-acento);
+}
+
+/* =============================================================================
+   3. ESTRUCTURA GENERAL Y BARRA SUPERIOR
+   ============================================================================= */
+.topbar-clinica {
+    background-color: var(--color-primario);
+    color: #FFFFFF;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(15, 76, 129, 0.15);
+}
+
+.topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.15rem;
+    color: #FFFFFF;
+}
+
+.topbar-nav {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.topbar-nav a {
+    color: #E0F2FE;
+    font-weight: 500;
+    font-size: 0.92rem;
+    padding: 6px 10px;
+    border-radius: var(--radio-borde);
+    transition: all 0.2s;
+}
+
+.topbar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.topbar-usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+}
+
+.badge-rol {
+    background-color: var(--color-azul-claro);
+    color: var(--color-primario);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn-salir {
+    color: #FECACA !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: var(--radio-borde);
+}
+
+.btn-salir:hover {
+    background-color: var(--color-peligro) !important;
+    color: #FFFFFF !important;
+}
+
+.contenedor-principal {
+    flex-grow: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.pie-pagina {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--color-borde);
+    padding: 14px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--color-texto-muted);
+}
+
+/* =============================================================================
+   4. BOTONES
+   ============================================================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border-radius: var(--radio-borde);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-primario {
+    background-color: var(--color-primario);
+    color: #FFFFFF;
+}
+
+.btn-primario:hover:not(:disabled) {
+    background-color: var(--color-primario-hover);
+    color: #FFFFFF;
+}
+
+.btn-secundario {
+    background-color: #FFFFFF;
+    border-color: var(--color-borde);
+    color: var(--color-texto);
+}
+
+.btn-secundario:hover {
+    background-color: var(--color-fondo);
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+}
+
+.btn-acento {
+    background-color: var(--color-acento);
+    color: #FFFFFF;
+}
+
+.btn-acento:hover {
+    background-color: #0c8a89;
+    color: #FFFFFF;
+}
+
+.btn-exito {
+    background-color: var(--color-exito);
+    color: #FFFFFF;
+}
+
+.btn-peligro {
+    background-color: var(--color-peligro);
+    color: #FFFFFF;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.82rem;
+}
+
+/* =============================================================================
+   5. FORMULARIOS Y CAMPOS DE ENTRADA
+   ============================================================================= */
+.campo-grupo {
+    margin-bottom: 16px;
+}
+
+.campo-etiqueta {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--color-texto);
+}
+
+.campo-control {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 0.92rem;
+    border: 1.5px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    background-color: #FFFFFF;
+    color: var(--color-texto);
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-control:focus {
+    outline: none;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.12);
+}
+
+.campo-control[readonly] {
+    background-color: #F1F5F9;
+    color: var(--color-texto-muted);
+}
+
+.fila-campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+}
+
+/* =============================================================================
+   6. TARJETAS Y CONTENEDORES
+   ============================================================================= */
+.tarjeta {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 2px 8px rgba(15, 76, 129, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.tarjeta-cabecera {
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.tarjeta-cabecera h2, .tarjeta-cabecera h3 {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+}
+
+/* =============================================================================
+   7. TABLAS ESTILIZADAS
+   ============================================================================= */
+.tabla-responsive {
+    overflow-x: auto;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    background: #FFFFFF;
+}
+
+.tabla-clinica {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.tabla-clinica th {
+    background-color: var(--color-primario);
+    color: #FFFFFF;
+    padding: 10px 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.tabla-clinica td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-borde);
+    vertical-align: middle;
+}
+
+.tabla-clinica tr:nth-child(even) td {
+    background-color: #F8FAFC;
+}
+
+.tabla-clinica tr:hover td {
+    background-color: #F1F7FC;
+}
+
+/* =============================================================================
+   8. INSIGNIAS DE ESTADO DE CITAS (BADGES)
+   ============================================================================= */
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-pendiente {
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
+}
+
+.badge-en-proceso {
+    background-color: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FDE68A;
+}
+
+.badge-finalizada {
+    background-color: #D1FAE5;
+    color: #047857;
+    border: 1px solid #A7F3D0;
+}
+
+.badge-cancelada {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+}
+
+/* =============================================================================
+   9. ALERTAS DE NOTIFICACIÓN
+   ============================================================================= */
+.alerta {
+    padding: 12px 16px;
+    border-radius: var(--radio-borde);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+}
+
+.alerta-exito {
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    color: #065F46;
+}
+
+.alerta-error {
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #991B1B;
+}
+
+.alerta-info {
+    background-color: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    color: #1E40AF;
+}
+
+.alerta-aviso {
+    background-color: #FEF3C7;
+    border: 1px solid #FDE68A;
+    color: #92400E;
+}
+
+/* =============================================================================
+   10. PANTALLAS DE LOGIN Y REGISTRO
+   ============================================================================= */
+.tarjeta-auth {
+    max-width: 420px;
+    margin: 40px auto;
+    background: #FFFFFF;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 4px 16px rgba(15, 76, 129, 0.08);
+    padding: 28px;
+}
+
+.auth-cabecera {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.auth-cabecera h2 {
+    color: var(--color-primario);
+    font-size: 1.5rem;
+}
+
+.auth-cabecera p {
+    color: var(--color-texto-muted);
+    font-size: 0.88rem;
+    margin-top: 4px;
+}
+
+.auth-enlaces {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.88rem;
+    color: var(--color-texto-muted);
+}
+
+/* =============================================================================
+   11. MÓDULO PACIENTE Y TICKET DIGITAL
+   ============================================================================= */
+.horas-grilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 8px;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    background: #FAFCFE;
+}
+
+.hora-opcion input[type="radio"] {
+    display: none;
+}
+
+.hora-boton {
+    display: block;
+    text-align: center;
+    padding: 6px 4px;
+    border: 1.5px solid var(--color-borde);
+    border-radius: 6px;
+    background: #FFFFFF;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.hora-boton:hover {
+    border-color: var(--color-acento);
+    background: var(--color-azul-claro);
+}
+
+.hora-opcion input[type="radio"]:checked + .hora-boton {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.hora-opcion.ocupada .hora-boton {
+    background-color: #F1F5F9;
+    color: #94A3B8;
+    text-decoration: line-through;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Ticket Digital */
+.tarjeta-ticket {
+    max-width: 440px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.ticket-cabecera {
+    background: var(--color-primario);
+    color: #FFFFFF;
+    text-align: center;
+    padding: 20px;
+}
+
+.ticket-cabecera h2 { font-size: 1.3rem; }
+.ticket-cabecera p { color: var(--color-azul-claro); font-size: 0.82rem; }
+
+.ticket-cuerpo { padding: 20px; }
+
+.ticket-fila {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--color-borde);
+    font-size: 0.9rem;
+}
+
+.ticket-etiqueta { color: var(--color-texto-muted); }
+
+.ticket-codigo-box {
+    text-align: center;
+    padding: 16px 10px;
+    background: #F8FAFC;
+    border-top: 2px dashed #CBD5E1;
+}
+
+#barcode { max-width: 100%; height: auto; margin: 0 auto; }
+
+/* =============================================================================
+   12. MÓDULO RECEPCIÓN (ESCÁNER Y AGENDA SEMANAL)
+   ============================================================================= */
+.caja-escaner {
+    background: #FFFFFF;
+    border: 2px dashed var(--color-primario);
+    border-radius: var(--radio-tarjeta);
+    padding: 28px;
+    text-align: center;
+}
+
+.input-escaner {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.semana-pestañas {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+}
+
+.tab-dia {
+    flex: 1;
+    min-width: 85px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 8px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.tab-dia:hover {
+    border-color: var(--color-acento);
+    background: var(--color-azul-claro);
+}
+
+.tab-dia.activo {
+    background: var(--color-primario);
+    border-color: var(--color-primario);
+    color: #FFFFFF;
+}
+
+.tab-dia-nombre { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+.tab-dia-num { font-size: 1.2rem; font-weight: 700; margin: 2px 0; }
+.tab-dia-conteo { font-size: 0.7rem; display: inline-block; padding: 2px 5px; border-radius: 8px; background: #E2E8F0; color: #0F172A; }
+.tab-dia.activo .tab-dia-conteo { background: rgba(255,255,255,0.25); color: #FFFFFF; }
+
+.resumen-grilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.resumen-caja {
+    background: #FFFFFF;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 10px;
+    text-align: center;
+}
+
+.resumen-num { font-size: 1.4rem; font-weight: 700; }
+.resumen-lbl { font-size: 0.78rem; color: var(--color-texto-muted); }
+
+/* =============================================================================
+   13. MÓDULO MÉDICO Y RECETA OFICIAL
+   ============================================================================= */
+.atencion-grilla {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 20px;
+}
+
+@media (max-width: 850px) {
+    .atencion-grilla { grid-template-columns: 1fr; }
+}
+
+.hoja-receta {
+    background: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto 30px;
+    padding: 36px;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.receta-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-primario);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.receta-cabecera h2 { color: var(--color-primario); font-size: 1.4rem; }
+.receta-cabecera p { font-size: 0.82rem; color: var(--color-texto-muted); }
+
+.receta-paciente-banner {
+    background: #F8FAFC;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.receta-firma-seccion {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.receta-firma-linea {
+    width: 240px;
+    border-top: 1.5px solid #0F172A;
+    text-align: center;
+    padding-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* =============================================================================
+   14. ESTILOS DE IMPRESIÓN LIMPIA (@media print)
+   ============================================================================= */
+@media print {
+    .no-print,
+    .topbar-clinica,
+    .pie-pagina,
+    .btn,
+    .alerta {
+        display: none !important;
+    }
+
+    body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        font-size: 12pt;
+    }
+
+    .contenedor-principal {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .tarjeta-ticket, .hoja-receta, .tarjeta {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 auto !important;
+    }
+
+    .ticket-cabecera {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        border-bottom: 2px solid #000000 !important;
+    }
+
+    .ticket-cabecera h2, .ticket-cabecera p { color: #000000 !important; }
+
+    .tabla-clinica th {
+        background-color: #E2E8F0 !important;
+        color: #000000 !important;
+        border: 1px solid #000000 !important;
+    }
+
+    .tabla-clinica td { border: 1px solid #000000 !important; }
+}
+
+
+/* =============================================================================
+   15. PANTALLA AGENDAR CITA (PASO A PASO)
+   ============================================================================= */
+
+/* Banner de Bienvenida */
+.banner-agendar-bienvenida {
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-acento) 100%);
+    color: #FFFFFF;
+    border-radius: var(--radio-tarjeta);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 14px rgba(15, 76, 129, 0.12);
+}
+
+.banner-icono-saludo {
+    font-size: 2.5rem;
+    background: rgba(255, 255, 255, 0.18);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.banner-agendar-bienvenida h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.banner-agendar-bienvenida p {
+    color: #E0F2FE;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Layout de 2 Columnas */
+.agendar-layout-grid {
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .agendar-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- TARJETA UNIFICADA DEL FORMULARIO DE AGENDAMIENTO --- */
+.tarjeta-formulario-agendar {
+    background: #FFFFFF;
+    border: 1px solid var(--color-borde);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(15, 76, 129, 0.06);
+}
+
+.formulario-agendar-cabecera {
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #EEF3F8;
+}
+
+.formulario-titulo {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin: 0;
+}
+
+.formulario-subtitulo {
+    font-size: 0.9rem;
+    color: var(--color-texto-muted);
+    margin: 4px 0 0 0;
+}
+
+.campo-grupo-agendar {
+    margin-bottom: 20px;
+}
+
+.etiqueta-agendar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin-bottom: 8px;
+}
+
+.numero-guia {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-azul-claro);
+    color: var(--color-primario);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.control-agendar {
+    width: 100%;
+    height: 46px;
+    border: 1.5px solid var(--color-borde);
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--color-texto);
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+.control-agendar:focus {
+    border-color: var(--color-acento);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.15);
+}
+
+.control-agendar:disabled {
+    background-color: #F8FAFC;
+    border-color: #E2E8F0;
+    color: #94A3B8;
+    cursor: not-allowed;
+}
+
+select.control-agendar {
+    cursor: pointer;
+}
+
+.ayuda-agendar {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-texto-muted);
+    margin-top: 5px;
+}
+
+/* Lista con scroll para médicos filtrados */
+.lista-medicos-scroll {
+    max-height: 190px;
+    overflow-y: auto;
+    border: 1.5px solid var(--color-borde);
+    border-radius: 10px;
+    margin-top: 8px;
+    background: #FFFFFF;
+    padding: 6px;
+}
+
+.medico-fila-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid transparent;
+}
+
+.medico-fila-item:hover {
+    background: #F8FAFD;
+    border-color: #E2E8F0;
+}
+
+.medico-fila-item.seleccionado {
+    background: var(--color-azul-claro);
+    border-color: var(--color-primario);
+}
+
+.medico-fila-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario), var(--color-acento));
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.medico-fila-info {
+    min-width: 0;
+}
+
+.medico-fila-nombre {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--color-texto);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.medico-fila-esp {
+    font-size: 0.78rem;
+    color: var(--color-texto-muted);
+    margin: 0;
+}
+
+.aviso-sin-medicos {
+    padding: 14px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--color-texto-muted);
+}
+
+/* Fila para Fecha y Hora (2 columnas en escritorio, apiladas en celular) */
+.fila-fecha-hora-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .fila-fecha-hora-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.input-con-boton-fecha {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-icono-calendario {
+    height: 46px;
+    width: 46px;
+    border: 1.5px solid var(--color-borde);
+    border-radius: 10px;
+    background: #FFFFFF;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-icono-calendario:hover:not(:disabled) {
+    border-color: var(--color-acento);
+    background: var(--color-azul-claro);
+}
+
+.btn-icono-calendario:disabled {
+    background: #F8FAFC;
+    border-color: #E2E8F0;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.texto-fecha-legible {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-primario);
+    margin-top: 6px;
+}
+
+.info-cupos-texto {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* Columna Lateral: Perfil, Próxima Cita y Resumen Flotante */
+.agendar-columna-lateral {
+    position: sticky;
+    top: 20px;
+}
+
+.tarjeta-lateral-perfil {
+    background: #FFFFFF;
+    border: 1px solid var(--color-borde);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(15, 76, 129, 0.04);
+}
+
+.perfil-avatar-circulo {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--color-azul-claro);
+    color: var(--color-primario);
+    font-weight: 700;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.perfil-info h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-texto);
+    margin: 0;
+}
+
+.perfil-info p {
+    font-size: 0.82rem;
+    color: var(--color-texto-muted);
+    margin: 2px 0 0 0;
+}
+
+.tarjeta-proxima-cita {
+    background: #FAFDFE;
+    border: 1px solid #D0E5F5;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.proxima-cita-titulo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.proxima-cita-cuerpo {
+    font-size: 0.9rem;
+}
+
+.proxima-cita-medico {
+    font-weight: 700;
+    color: var(--color-texto);
+}
+
+.proxima-cita-esp {
+    font-size: 0.82rem;
+    color: var(--color-texto-muted);
+}
+
+.proxima-cita-fecha {
+    font-weight: 600;
+    color: var(--color-primario);
+    margin: 6px 0;
+}
+
+.proxima-cita-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-acento);
+}
+
+.proxima-cita-vacia {
+    font-size: 0.85rem;
+    color: var(--color-texto-muted);
+    margin: 0;
+}
+
+/* Tarjeta Resumen de tu Cita */
+.tarjeta-resumen-flotante {
+    background: #FFFFFF;
+    border: 1.5px solid var(--color-primario);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 4px 20px rgba(15, 76, 129, 0.08);
+}
+
+.resumen-titulo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin-bottom: 16px;
+    border-bottom: 1px solid #EEF3F8;
+    padding-bottom: 10px;
+}
+
+.resumen-items-lista {
+    margin-bottom: 20px;
+}
+
+.resumen-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--color-borde);
+    font-size: 0.9rem;
+}
+
+.resumen-item-lbl {
+    color: var(--color-texto-muted);
+    font-size: 0.85rem;
+}
+
+.resumen-item-val {
+    color: var(--color-texto);
+    text-align: right;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-confirmar-agendar {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+}
