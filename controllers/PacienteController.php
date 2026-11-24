@@ -58,6 +58,19 @@ class PacienteController {
 
             $fechaHora = "{$fecha} {$hora}:00";
 
+            // Validar que la hora seleccionada pertenezca a las franjas permitidas:
+            // Mañana: 07:00 a 12:00 (cada 30 min)
+            // Tarde:  13:30 a 19:00 (cada 30 min)
+            $horariosPermitidos = [
+                '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+                '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'
+            ];
+            if (!in_array($hora, $horariosPermitidos, true)) {
+                guardarFlash('error', 'El horario seleccionado no es válido. Los horarios disponibles son: Mañana de 07:00 a 12:00 y Tarde de 13:30 a 19:00.');
+                header('Location: index.php?ruta=paciente/agendar');
+                exit;
+            }
+
             // Validar que no sea fecha u hora pasada
             if (strtotime($fechaHora) < time()) {
                 guardarFlash('error', 'No puede agendar una cita en una fecha u hora pasada.');

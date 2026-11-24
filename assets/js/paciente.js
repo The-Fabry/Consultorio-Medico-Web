@@ -21,19 +21,25 @@ var seleccionCita = {
 var NOMBRES_DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 var NOMBRES_MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-// Definición de las horas agrupadas por jornada
+// Definición de las horas agrupadas por jornada (Mañana y Tarde)
+// Mañana: 07:00 a 12:00 (cada 30 min, excluye 06:00 y 06:30)
+// Tarde:  13:30 a 19:00 (cada 30 min, hasta las 7:00 p. m.)
 var GRUPOS_HORAS = [
     {
-        etiqueta: 'Mañana (06:00 a 11:30)',
-        horas: ['06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30']
+        etiqueta: 'Mañana (07:00 a 12:00)',
+        horas: [
+            '07:00', '07:30', '08:00', '08:30',
+            '09:00', '09:30', '10:00', '10:30',
+            '11:00', '11:30', '12:00'
+        ]
     },
     {
-        etiqueta: 'Tarde (12:00 a 17:30)',
-        horas: ['12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30']
-    },
-    {
-        etiqueta: 'Noche (18:00 a 20:00)',
-        horas: ['18:00', '18:30', '19:00', '19:30', '20:00']
+        etiqueta: 'Tarde (13:30 a 19:00)',
+        horas: [
+            '13:30', '14:00', '14:30',
+            '15:00', '15:30', '16:00', '16:30',
+            '17:00', '17:30', '18:00', '18:30', '19:00'
+        ]
     }
 ];
 
