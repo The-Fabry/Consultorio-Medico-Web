@@ -1,0 +1,48 @@
+# =============================================================================
+# .gitignore - SmartMed Web
+# Archivos y carpetas ignorados por Git
+# =============================================================================
+
+# Archivos de entorno y credenciales
+.env
+.env.*
+*.env
+
+# Archivos de configuración de editores e IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos generados por el sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Logs, sesiones y archivos temporales
+*.log
+*.tmp
+*.temp
+error_log
+access_log
+sess_*
+cookie*.txt
+
+# Dependencias y paquetes
+vendor/
+composer.phar
+
+# Copias de seguridad
+*.bak
+*.backup
+*~
