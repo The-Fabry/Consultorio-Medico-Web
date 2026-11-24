@@ -23,9 +23,11 @@ require_once __DIR__ . '/header.php';
             <div class="login-marca-fondo-formas"></div>
             
             <div class="login-marca-contenido">
-                <!-- Logotipo destacado de SmartMed Web (amplio, integrado y sin caja blanca restrictiva) -->
+                <!-- Logotipo centrado de SmartMed Web dentro de un recuadro blanco para máximo contraste -->
                 <div class="login-marca-logo">
-                    <img src="assets/logo.png" alt="Logo SmartMed Web" class="login-logo-img">
+                    <div class="login-logo-caja">
+                        <img src="assets/logo.png" alt="Logo SmartMed Web" class="login-logo-img">
+                    </div>
                 </div>
 
                 <!-- Mensaje principal de bienvenida -->
