@@ -157,19 +157,15 @@ $indicacionesPrevias = $recetaActual['indicaciones'] ?? '';
                                 <span>Prescripción de Medicamentos</span>
                             </h4>
                             <?php if (!empty($recetaActual)): ?>
-                                <span style="font-size:0.8rem; background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:12px; font-weight:600; border:1px solid #86EFAC;">
+                                <span style="font-size:0.8rem; background:#EFF6FF; color:var(--color-primario); padding:3px 10px; border-radius:12px; font-weight:600; border:1px solid #BFDBFE;">
                                     Código: <?= htmlspecialchars($recetaActual['codigo_receta'], ENT_QUOTES, 'UTF-8') ?>
                                 </span>
                             <?php endif; ?>
                         </div>
-                        
-                        <p class="bloque-prescripcion-ayuda">
-                            Escriba los medicamentos con su posología en texto libre. Cada línea se registrará como un medicamento y estará disponible al instante en el portal del paciente (Mis Recetas) para consulta e impresión.
-                        </p>
 
-                        <div class="campo-grupo" style="margin-bottom:12px;">
-                            <label for="prescripcion" class="campo-etiqueta" style="color:#166534;">
-                                Medicamentos y Posología (uno por línea o en texto libre)
+                        <div class="campo-grupo" style="margin-bottom:14px;">
+                            <label for="prescripcion" class="campo-etiqueta">
+                                Medicamentos y Posología <span style="font-weight:normal; font-size:0.8rem; color:#64748B;">(uno por línea o en texto libre)</span>
                             </label>
                             <textarea name="prescripcion" id="prescripcion" rows="4" class="campo-control prescripcion-textarea" placeholder="Ejemplo:
 - Tomar Finalin cada 12 horas por 3 días
@@ -178,10 +174,10 @@ $indicacionesPrevias = $recetaActual['indicaciones'] ?? '';
                         </div>
 
                         <div class="campo-grupo" style="margin-bottom:0;">
-                            <label for="indicaciones" class="campo-etiqueta" style="color:#166534;">
+                            <label for="indicaciones" class="campo-etiqueta">
                                 Indicaciones Generales, Dieta o Cuidados Especiales
                             </label>
-                            <textarea name="indicaciones" id="indicaciones" rows="2" class="campo-control" style="background:#FFFFFF; border-color:#86EFAC;" placeholder="Ejemplo: Reposo relativo por 48 horas, hidratación abundante y dieta blanda..." <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($indicacionesPrevias, ENT_QUOTES, 'UTF-8') ?></textarea>
+                            <textarea name="indicaciones" id="indicaciones" rows="2" class="campo-control" style="background:#FFFFFF;" placeholder="Ejemplo: Reposo relativo por 48 horas, hidratación abundante y dieta blanda..." <?= $esFinalizada ? 'disabled' : '' ?>><?= htmlspecialchars($indicacionesPrevias, ENT_QUOTES, 'UTF-8') ?></textarea>
                         </div>
                     </div>
 
