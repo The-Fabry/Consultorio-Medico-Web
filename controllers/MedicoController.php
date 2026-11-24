@@ -27,30 +27,60 @@ class MedicoController {
     }
 
     // Muestra la agenda personal del médico logueado.
-    // Recibe: fecha y estado opcionales por GET. Devuelve: vista agenda.php.
+    // Solo lista las citas que corresponden al especialista en sesión.
+    // Si no se encuentra un especialista asociado a la cédula del usuario, no expone citas de otros.
     public function agenda(): void {
         requerirRol('medico');
         $usuario = usuarioActual();
-        $especialista = $this->especialistaModelo->buscarPorCedula($usuario['cedula']);
-        $idEspecialista = $especialista ? (int)$especialista['id_especialista'] : 1;
+        $especialista = $this->especialistaModelo->buscarPorCedula($usuario['cedula'] ?? '');
 
+        // Validación de seguridad clínica: si el usuario no tiene ficha de especialista asociada,
+        // no se asigna ningún id por defecto (evita ver citas de otros especialistas).
+        if (!$especialista) {
+            guardarFlash('error', 'No se encontró un perfil de médico especialista asociado a su cuenta.');
+            $citas = [];
+            $fechaFiltro = '';
+            $estadoFiltro = '';
+            $titulo = 'Mi Agenda Médica';
+            require_once __DIR__ . '/../views/medico/agenda.php';
+            return;
+        }
+
+        $idEspecialista = (int)$especialista['id_especialista'];
         $fechaFiltro = $_GET['fecha'] ?? '';
         $estadoFiltro = $_GET['estado'] ?? '';
 
+        // Filtrar citas asignadas estrictamente a este médico
         $citas = $this->citaModelo->listarPorMedico($idEspecialista, $fechaFiltro ?: null, $estadoFiltro ?: null);
-        $titulo = 'Mi Agenda Médica';
+        $titulo = 'Mi Agenda Médica - ' . $especialista['nombre_completo'];
         require_once __DIR__ . '/../views/medico/agenda.php';
     }
 
-    // Muestra la pantalla de atención médica (solo para citas En Proceso).
+    // Muestra la pantalla de atención médica (solo para citas En Proceso o Finalizadas del médico).
     // Recibe: id de la cita por GET. Devuelve: vista atencion.php.
     public function atencion(): void {
         requerirRol('medico');
+        $usuario = usuarioActual();
+        $especialista = $this->especialistaModelo->buscarPorCedula($usuario['cedula'] ?? '');
+
+        if (!$especialista) {
+            guardarFlash('error', 'No tiene un perfil de médico asociado.');
+            header('Location: index.php?ruta=login');
+            exit;
+        }
+
         $idCita = (int)($_GET['id'] ?? 0);
         $cita = $this->citaModelo->buscarPorId($idCita);
 
         if (!$cita) {
             guardarFlash('error', 'Cita médica no encontrada.');
+            header('Location: index.php?ruta=medico/agenda');
+            exit;
+        }
+
+        // Validación de pertenencia: un médico solo puede atender sus propias citas asignadas
+        if ((int)$cita['id_especialista'] !== (int)$especialista['id_especialista']) {
+            guardarFlash('error', 'No tiene permisos para atender una cita asignada a otro especialista.');
             header('Location: index.php?ruta=medico/agenda');
             exit;
         }

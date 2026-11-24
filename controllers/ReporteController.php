@@ -9,22 +9,45 @@
 require_once __DIR__ . '/../config/sesion.php';
 require_once __DIR__ . '/../config/conexion.php';
 require_once __DIR__ . '/../models/Cliente.php';
+require_once __DIR__ . '/../models/Especialista.php';
 
 class ReporteController {
 
     private PDO $pdo;
     private Cliente $clienteModelo;
+    private Especialista $especialistaModelo;
 
     public function __construct() {
-        // Solo médicos y recepcionistas pueden consultar los reportes generales
-        requerirRol(['medico', 'recepcion']);
+        // Médicos, recepcionistas y administradores acceden a los reportes clínicos
+        requerirRol(['medico', 'recepcion', 'admin']);
         $this->pdo = conectarBD();
         $this->clienteModelo = new Cliente();
+        $this->especialistaModelo = new Especialista();
     }
 
-    // Reporte de citas: general (si no se ponen fechas) o por rango de fechas.
+    // Reporte de citas:
+    // - Si el usuario es 'medico', filtra ÚNICAMENTE sus propias citas asignadas.
+    // - Si el usuario es 'recepcion' o 'admin', muestra las citas globales de todo el consultorio.
     // Recibe: fecha_inicio y fecha_fin opcionales por GET. Devuelve: vista citas.php.
     public function citas(): void {
+        $usuario = usuarioActual();
+        $rol = $usuario['rol'] ?? '';
+        $especialistaActual = null;
+
+        // Si es médico, identificamos su id_especialista a partir de su cédula
+        if ($rol === 'medico') {
+            $especialistaActual = $this->especialistaModelo->buscarPorCedula($usuario['cedula'] ?? '');
+            if (!$especialistaActual) {
+                guardarFlash('error', 'No se encontró un perfil de médico especialista asociado a su cuenta.');
+                $citas = [];
+                $fechaInicio = '';
+                $fechaFin = '';
+                $titulo = 'Reporte de Citas Médicas';
+                require_once __DIR__ . '/../views/reportes/citas.php';
+                return;
+            }
+        }
+
         $fechaInicio = $_GET['fecha_inicio'] ?? '';
         $fechaFin    = $_GET['fecha_fin'] ?? '';
 
@@ -33,12 +56,24 @@ class ReporteController {
                 FROM citas c
                 INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente
                 INNER JOIN especialistas e ON c.id_especialista = e.id_especialista";
+        $condiciones = [];
         $params = [];
+
+        // Filtro por médico en sesión (si es rol médico)
+        if ($rol === 'medico' && $especialistaActual) {
+            $condiciones[] = "c.id_especialista = ?";
+            $params[] = (int)$especialistaActual['id_especialista'];
+        }
 
         // Si se especificó un rango de fechas
         if (!empty($fechaInicio) && !empty($fechaFin)) {
-            $sql .= " WHERE DATE(c.fecha_cita) BETWEEN ? AND ?";
-            $params = [$fechaInicio, $fechaFin];
+            $condiciones[] = "DATE(c.fecha_cita) BETWEEN ? AND ?";
+            $params[] = $fechaInicio;
+            $params[] = $fechaFin;
+        }
+
+        if (!empty($condiciones)) {
+            $sql .= " WHERE " . implode(" AND ", $condiciones);
         }
 
         $sql .= " ORDER BY c.fecha_cita DESC";
@@ -46,7 +81,7 @@ class ReporteController {
         $stmt->execute($params);
         $citas = $stmt->fetchAll();
 
-        $titulo = 'Reporte de Citas Médicas';
+        $titulo = 'Reporte de Citas Médicas' . ($especialistaActual ? ' - ' . $especialistaActual['nombre_completo'] : '');
         require_once __DIR__ . '/../views/reportes/citas.php';
     }
 
