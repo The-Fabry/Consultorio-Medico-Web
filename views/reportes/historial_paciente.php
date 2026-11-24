@@ -20,12 +20,23 @@ if ($cliente) {
 
 // Renderizar cabecera superior unificada
 require __DIR__ . '/cabecera_reporte.php';
+
+// URL para generar el PDF del historial con Dompdf
+$urlPdf = "index.php?ruta=reportes/pdf&tipo=historial" . 
+          (!empty($cedula) ? "&cedula=" . urlencode($cedula) : "");
 ?>
 
 <!-- Barra de acciones rápidas (oculta al imprimir) -->
-<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-    <span style="color:#64748B; font-size:0.88rem;">Busque el expediente por cédula del paciente o imprima la ficha completa.</span>
-    <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Historial</button>
+<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; flex-wrap:wrap; gap:10px;">
+    <span style="color:#64748B; font-size:0.88rem;">Busque el expediente por cédula del paciente o expórtelo a PDF.</span>
+    <div style="display:flex; gap:10px;">
+        <a href="<?= $urlPdf ?>" target="_blank" class="btn btn-acento">
+            📄 Generar PDF (Dompdf)
+        </a>
+        <button type="button" class="btn btn-primario" onclick="window.print()">
+            🖨 Imprimir Historial
+        </button>
+    </div>
 </div>
 
 <!-- Filtro por cédula (oculto al imprimir) -->

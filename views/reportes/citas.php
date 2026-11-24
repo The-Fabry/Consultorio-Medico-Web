@@ -27,12 +27,23 @@ $contextoReporte = implode(" &bull; ", $contextoPartes);
 
 // Renderizar cabecera superior unificada
 require __DIR__ . '/cabecera_reporte.php';
+// URL para descargar o visualizar en PDF con Dompdf
+$urlPdf = "index.php?ruta=reportes/pdf&tipo=citas" . 
+          (!empty($fechaInicio) ? "&fecha_inicio=" . urlencode($fechaInicio) : "") . 
+          (!empty($fechaFin) ? "&fecha_fin=" . urlencode($fechaFin) : "");
 ?>
 
 <!-- Barra de acciones rápidas (oculta al imprimir) -->
-<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-    <span style="color:#64748B; font-size:0.88rem;">Utilice los filtros para segmentar fechas o imprima el reporte oficial.</span>
-    <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Reporte</button>
+<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; flex-wrap:wrap; gap:10px;">
+    <span style="color:#64748B; font-size:0.88rem;">Utilice los filtros para segmentar fechas o exporte el reporte oficial en PDF.</span>
+    <div style="display:flex; gap:10px;">
+        <a href="<?= $urlPdf ?>" target="_blank" class="btn btn-acento">
+            📄 Generar PDF (Dompdf)
+        </a>
+        <button type="button" class="btn btn-primario" onclick="window.print()">
+            🖨 Imprimir Reporte
+        </button>
+    </div>
 </div>
 
 <!-- Filtro por rango de fechas (oculto al imprimir) -->
