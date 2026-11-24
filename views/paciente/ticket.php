@@ -7,12 +7,20 @@
  */
 require_once __DIR__ . '/../header.php';
 $fechaFormato = date('d/m/Y H:i', strtotime($cita['fecha_cita']));
+$fechaEmisionTicket = date('d/m/Y H:i');
 ?>
 
 <div class="tarjeta-ticket">
+    <!-- Cabecera Superior Estandarizada: SMARTMED - TICKET DE CITA -->
     <div class="ticket-cabecera">
-        <h2>SmartMed Consultorio</h2>
-        <p>Comprobante Digital de Cita Médica</p>
+        <div style="font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; color: #BAE6FD; margin-bottom: 2px;">
+            SMARTMED CONSULTORIO &bull; COMPROBANTE OFICIAL
+        </div>
+        <h2 style="margin: 0; font-size: 1.35rem; letter-spacing: 0.5px;">SMARTMED - TICKET DE CITA</h2>
+        <p style="margin: 3px 0 0 0; color: #E0F2FE; font-size: 0.82rem;">Control de turno, horario de atención y código de barras</p>
+        <div style="margin-top: 8px; font-size: 0.72rem; color: #BAE6FD; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 5px;">
+            Emisión: <?= $fechaEmisionTicket ?> &bull; Código: <strong><?= htmlspecialchars($cita['codigo_barras'], ENT_QUOTES, 'UTF-8') ?></strong>
+        </div>
     </div>
 
     <div class="ticket-cuerpo">

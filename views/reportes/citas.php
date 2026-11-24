@@ -2,30 +2,37 @@
 /**
  * citas.php
  * Para qué sirve: Reporte unificado de citas médicas (general o por rango de fechas) listo para imprimir.
- * Trabaja con: controllers/ReporteController.php.
+ * Trabaja con: controllers/ReporteController.php y views/reportes/cabecera_reporte.php.
  * Equivale en NetBeans a: GestorReportes.java / Reportes JasperReports
  */
 require_once __DIR__ . '/../header.php';
 $esRango = (!empty($fechaInicio) && !empty($fechaFin));
+
+// Preparar datos para la cabecera unificada
+$tituloReporte = "SMARTMED - REPORTE DE CITAS";
+$subtituloReporte = "Control y auditoría de citas médicas, especialidades y estados de atención";
+$contextoPartes = [];
+if (!empty($especialistaActual)) {
+    $contextoPartes[] = "Médico: " . htmlspecialchars($especialistaActual['nombre_completo'], ENT_QUOTES, 'UTF-8') . " (" . htmlspecialchars($especialistaActual['especialidad'], ENT_QUOTES, 'UTF-8') . ")";
+} else {
+    $contextoPartes[] = "Vista General del Consultorio (Recepción/Administración)";
+}
+if ($esRango) {
+    $contextoPartes[] = "Período: " . date('d/m/Y', strtotime($fechaInicio)) . " al " . date('d/m/Y', strtotime($fechaFin));
+} else {
+    $contextoPartes[] = "Histórico Completo";
+}
+$contextoPartes[] = "Total Registros: " . count($citas);
+$contextoReporte = implode(" &bull; ", $contextoPartes);
+
+// Renderizar cabecera superior unificada
+require __DIR__ . '/cabecera_reporte.php';
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-    <div>
-        <h2 style="color:var(--color-primario);">
-            <?= $esRango ? 'Reporte de Citas por Rango de Fechas' : 'Reporte General de Citas' ?>
-        </h2>
-        <p style="color:#64748B; font-size:0.9rem;">
-            <?php if (!empty($especialistaActual)): ?>
-                <strong>Filtro aplicado:</strong> Citas asignadas al <?= htmlspecialchars($especialistaActual['nombre_completo'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($especialistaActual['especialidad'], ENT_QUOTES, 'UTF-8') ?>) &bull;
-            <?php else: ?>
-                <strong>Alcance:</strong> Vista general de todo el consultorio (Recepción) &bull;
-            <?php endif; ?>
-            <?= $esRango ? "Período: " . date('d/m/Y', strtotime($fechaInicio)) . " al " . date('d/m/Y', strtotime($fechaFin)) : "Todas las fechas" ?> &bull; Total: <strong><?= count($citas) ?></strong>
-        </p>
-    </div>
-    <div class="no-print">
-        <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Reporte</button>
-    </div>
+<!-- Barra de acciones rápidas (oculta al imprimir) -->
+<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+    <span style="color:#64748B; font-size:0.88rem;">Utilice los filtros para segmentar fechas o imprima el reporte oficial.</span>
+    <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Reporte</button>
 </div>
 
 <!-- Filtro por rango de fechas (oculto al imprimir) -->

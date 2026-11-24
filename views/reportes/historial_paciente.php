@@ -2,22 +2,30 @@
 /**
  * historial_paciente.php
  * Para qué sirve: Muestra el expediente clínico completo del paciente con sus diagnósticos médicos.
- * Trabaja con: controllers/ReporteController.php.
+ * Trabaja con: controllers/ReporteController.php y views/reportes/cabecera_reporte.php.
  * Equivale en NetBeans a: ReporteHistorialClinico.jrxml
  */
 require_once __DIR__ . '/../header.php';
+
+// Preparar datos para la cabecera unificada
+$tituloReporte = "SMARTMED - HISTORIAL CLÍNICO";
+$subtituloReporte = "Expediente médico de consultas, diagnósticos clínicos y notas de evolución";
+if ($cliente) {
+    $contextoReporte = "Paciente: <strong>" . htmlspecialchars($cliente['nombre'], ENT_QUOTES, 'UTF-8') . "</strong> (C.I. " . htmlspecialchars($cliente['cedula'], ENT_QUOTES, 'UTF-8') . " &bull; Tel: " . htmlspecialchars($cliente['telefono'], ENT_QUOTES, 'UTF-8') . ") &bull; Consultas: " . count($historiales);
+    $codigoEmision = "EXP-" . htmlspecialchars($cliente['cedula'], ENT_QUOTES, 'UTF-8');
+} else {
+    $contextoReporte = "Historial General del Consultorio &bull; Total Atenciones Registradas: " . count($historiales);
+    $codigoEmision = null;
+}
+
+// Renderizar cabecera superior unificada
+require __DIR__ . '/cabecera_reporte.php';
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-    <div>
-        <h2 style="color:var(--color-primario);">Historial Clínico de Pacientes</h2>
-        <p style="color:#64748B; font-size:0.9rem;">
-            <?= $cliente ? "Expediente de: <strong>" . htmlspecialchars($cliente['nombre'], ENT_QUOTES, 'UTF-8') . "</strong> (C.I. " . htmlspecialchars($cliente['cedula'], ENT_QUOTES, 'UTF-8') . ")" : "Todas las consultas médicas registradas" ?>
-        </p>
-    </div>
-    <div class="no-print">
-        <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Historial</button>
-    </div>
+<!-- Barra de acciones rápidas (oculta al imprimir) -->
+<div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+    <span style="color:#64748B; font-size:0.88rem;">Busque el expediente por cédula del paciente o imprima la ficha completa.</span>
+    <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Historial</button>
 </div>
 
 <!-- Filtro por cédula (oculto al imprimir) -->
