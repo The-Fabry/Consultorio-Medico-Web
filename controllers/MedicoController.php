@@ -62,10 +62,19 @@ class MedicoController {
             exit;
         }
 
-        // Si se envió el formulario para guardar el diagnóstico médico
+        // Si se envió el formulario para guardar el diagnóstico y prescripción médica
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Regla de negocio: Si la cita ya finalizó, no se permite ninguna modificación
+            if ($cita['estado'] === 'Finalizada') {
+                guardarFlash('error', 'No se puede editar porque esta cita ya finalizó.');
+                header('Location: index.php?ruta=medico/atencion&id=' . $idCita);
+                exit;
+            }
+
             $diagnostico = trim($_POST['diagnostico'] ?? '');
             $notas = trim($_POST['notas'] ?? '');
+            $prescripcionTexto = trim($_POST['prescripcion'] ?? '');
+            $indicaciones = trim($_POST['indicaciones'] ?? '');
 
             if (empty($diagnostico)) {
                 guardarFlash('error', 'El diagnóstico médico es obligatorio.');
@@ -73,33 +82,77 @@ class MedicoController {
                 exit;
             }
 
+            // 1. Guardar o actualizar la atención en el historial clínico (marca la cita como Finalizada)
             $this->historialModelo->guardarAtencion($idCita, $diagnostico, $notas);
-            guardarFlash('exito', 'Atención registrada con éxito. La cita quedó Finalizada.');
-            header('Location: index.php?ruta=medico/agenda');
+
+            // 2. Procesar prescripción de medicamentos si el médico escribió indicaciones libres
+            if (!empty($prescripcionTexto)) {
+                // Separar por saltos de línea para soportar múltiples medicamentos o indicaciones
+                $lineas = preg_split('/\r\n|\r|\n/', $prescripcionTexto);
+                $medsValidos = [];
+
+                foreach ($lineas as $linea) {
+                    $lineaLimpia = trim($linea);
+                    if ($lineaLimpia !== '') {
+                        $medsValidos[] = [
+                            'medicamento'        => $lineaLimpia,
+                            'dosis'              => 'Según indicación',
+                            'frecuencia'         => 'Ver posología',
+                            'duracion'           => 'Tratamiento',
+                            'via_administracion' => 'Oral'
+                        ];
+                    }
+                }
+
+                if (!empty($medsValidos)) {
+                    // Verificar si ya existe una receta para esta cita
+                    $recetaPrevia = $this->recetaModelo->buscarPorCita($idCita);
+
+                    if ($recetaPrevia) {
+                        $this->recetaModelo->actualizarConMedicamentos(
+                            (int) $recetaPrevia['id_receta'],
+                            $indicaciones,
+                            $medsValidos
+                        );
+                    } else {
+                        // Generar código único de receta: REC-AAAAMMDD-####
+                        $fecha = date('Ymd');
+                        $random = str_pad((string)random_int(1000, 9999), 4, '0', STR_PAD_LEFT);
+                        $codigoReceta = "REC-{$fecha}-{$random}";
+
+                        $this->recetaModelo->guardarConMedicamentos(
+                            $cita['id_cita'],
+                            $cita['id_cliente'],
+                            $cita['id_especialista'],
+                            $codigoReceta,
+                            $indicaciones,
+                            $medsValidos
+                        );
+                    }
+                }
+            }
+
+            guardarFlash('exito', 'Atención médica y prescripción registradas con éxito. La cita quedó Finalizada.');
+            header('Location: index.php?ruta=medico/atencion&id=' . $idCita);
             exit;
         }
 
         $consultasAnteriores = $this->historialModelo->listarPorCliente($cita['id_cliente']);
         $historialActual = $this->historialModelo->buscarPorCita($idCita);
+        $recetaActual = $this->recetaModelo->buscarPorCita($idCita);
+        $esFinalizada = ($cita['estado'] === 'Finalizada');
+
         $titulo = 'Atención Médica - Cita #' . $cita['id_cita'];
         require_once __DIR__ . '/../views/medico/atencion.php';
     }
 
     // Muestra el formulario para prescribir medicamentos a una cita atendida.
-    // Recibe: id_cita por GET. Devuelve: vista receta_form.php.
+    // Redirige a la sección integrada dentro de la atención médica.
     public function recetaForm(): void {
         requerirRol('medico');
         $idCita = (int)($_GET['id_cita'] ?? 0);
-        $cita = $this->citaModelo->buscarPorId($idCita);
-
-        if (!$cita || $cita['estado'] === 'Pendiente' || $cita['estado'] === 'Cancelada') {
-            guardarFlash('error', 'Solo puede prescribir recetas en citas en atención o finalizadas.');
-            header('Location: index.php?ruta=medico/agenda');
-            exit;
-        }
-
-        $titulo = 'Emitir Receta Médica';
-        require_once __DIR__ . '/../views/medico/receta_form.php';
+        header('Location: index.php?ruta=medico/atencion&id=' . $idCita . '#seccion-receta');
+        exit;
     }
 
     // Guarda la receta médica y sus medicamentos en la base de datos.
@@ -112,6 +165,13 @@ class MedicoController {
         if (!$cita) {
             guardarFlash('error', 'Cita médica no válida.');
             header('Location: index.php?ruta=medico/agenda');
+            exit;
+        }
+
+        // Si la cita ya finalizó, bloquear edición
+        if ($cita['estado'] === 'Finalizada') {
+            guardarFlash('error', 'No se puede editar porque esta cita ya finalizó.');
+            header('Location: index.php?ruta=medico/atencion&id=' . $idCita);
             exit;
         }
 
@@ -174,6 +234,19 @@ class MedicoController {
             guardarFlash('error', 'Receta médica no encontrada.');
             header('Location: index.php?ruta=login');
             exit;
+        }
+
+        // Validación de seguridad para paciente: solo puede ver sus propias recetas
+        $usuario = usuarioAutenticado();
+        if ($usuario && $usuario['rol'] === 'paciente') {
+            require_once __DIR__ . '/../models/Cliente.php';
+            $clienteModelo = new \Cliente();
+            $cliente = $clienteModelo->buscarPorIdUsuario((int) $usuario['id_usuario']);
+            if (!$cliente || (int)$receta['id_cliente'] !== (int)$cliente['id_cliente']) {
+                guardarFlash('error', 'No tiene permisos para ver esta receta.');
+                header('Location: index.php?ruta=paciente/recetas');
+                exit;
+            }
         }
 
         $titulo = 'Receta Médica ' . $receta['codigo_receta'];
