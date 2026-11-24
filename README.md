@@ -1,202 +1,288 @@
-# SmartMed Web — Sistema de Consultorio Médico
+# SmartMed Web — Sistema de Gestión para Consultorio Médico
 
-**SmartMed Web** es una aplicación web sencilla y modular para la gestión integral de un consultorio médico. Permite a los pacientes crear su cuenta y agendar citas médicas con validación de horarios en tiempo real; al personal de recepción registrar la llegada mediante escaneo de código de barras o digitación; y a los médicos especialistas consultar su agenda, revisar el historial previo del paciente, registrar el diagnóstico clínico y emitir recetas médicas electrónicas con código de barras listo para imprimir.
+**SmartMed Web** es una solución web integral, modular y de alto rendimiento diseñada bajo la arquitectura **Modelo-Vista-Controlador (MVC)** en **PHP 8 nativo**, **MySQL/PDO** y **JavaScript Vanilla**. El sistema automatiza y sincroniza todo el ciclo de atención clínica de un consultorio: desde el auto-registro de pacientes y la reserva de citas en franjas horarias validadas en tiempo real, hasta la recepción asistida por código de barras, la consulta médica especializada con diagnóstico y prescripción integrada, y la generación oficial de reportes y recetas en formato **PDF** mediante la librería **Dompdf**.
 
 ---
 
-## 1. Estructura del Proyecto (Explicación archivo por archivo)
+## 1. Tecnologías Utilizadas
 
-Toda la aplicación se encuentra organizada en la raíz de manera directa, sin capas abstractas ni configuraciones ocultas:
+* **Backend:** PHP 8.x con arquitectura MVC limpia, Front Controller (`index.php`), sesiones nativas seguras y tipado estricto sin dependencias de frameworks externos pesados.
+* **Base de Datos:** MySQL / MariaDB con motor transaccional **InnoDB**, juego de caracteres `utf8mb4_unicode_ci`, llaves foráneas (`CASCADE`/`RESTRICT`), triggers automáticos de sincronización y abstracción mediante **PDO** con sentencias preparadas contra ataques de inyección SQL.
+* **Frontend:** HTML5 semántico y CSS3 moderno organizado con variables globales `:root`, diseño responsivo, pantalla de autenticación dividida (*Split-Screen Login*) con identidad corporativa SmartMed, componentes de alerta accesibles y reglas `@media print` con calibración cromática exacta (`print-color-adjust: exact`).
+* **JavaScript:** JavaScript nativo (ES6+) sin frameworks, con peticiones asíncronas **AJAX/Fetch**, validación de entradas numéricas en tiempo real (cédula y teléfono) e interactividad para citas dinámicas.
+* **Librerías Integradas:**
+  * **JsBarcode (v3.11.5):** Generación vectorial offline de códigos de barra estándar **CODE_128** en tickets y recetas.
+  * **Dompdf:** Generador de documentos PDF para la exportación de reportes institucionales y expedientes clínicos desde la base de datos.
+
+---
+
+## 2. Estructura Real de Carpetas y Archivos
+
+El proyecto mantiene una estructura transparente y auto-contenida, facilitando la comprensión y defensa ante un tribunal evaluador:
 
 ```text
 Consultorio Medico Web/
-├── index.php                      ← Punto de entrada: lee ?ruta=... y ejecuta el controlador
-├── config/
-│   ├── conexion.php               ← Conexión a MySQL con PDO a la base consultorio_dbw (ConexionBD.java).
-│   └── sesion.php                 ← Controla el inicio de sesión y restringe las pantallas por rol (Sesion.java).
-├── controllers/                   ← Reciben las peticiones del usuario, validan y deciden qué mostrar:
-│   ├── AuthController.php         ← Gestiona el login, creación de cuentas de pacientes y cierre de sesión.
-│   ├── PacienteController.php     ← Controla el agendamiento, visualización de tickets y cancelación de citas.
-│   ├── RecepcionController.php    ← Controla la validación del ticket por escáner y la agenda semanal de citas.
-│   ├── MedicoController.php       ← Controla la agenda del médico, la consulta clínica y la emisión de recetas.
-│   └── ReporteController.php      ← Genera las vistas imprimibles de citas e historial clínico.
-├── models/                        ← Clases que contienen las consultas SQL a la base de datos:
-│   ├── Usuario.php                ← Consultas de cuentas de usuario y verificación de credenciales.
-│   ├── Cliente.php                ← Consultas de información personal de los pacientes.
-│   ├── Especialista.php           ← Consultas del listado de médicos especialistas disponibles.
-│   ├── Cita.php                   ← Consultas de agendamiento, verificación de horarios y cambio de estados.
-│   ├── HistorialClinico.php       ← Consultas y registro de diagnósticos y notas médicas.
-│   └── Receta.php                 ← Consultas y guardado de recetas y medicamentos prescritos.
-├── views/                         ← Vistas visuales en HTML con PHP mínimo:
-│   ├── header.php                 ← Barra superior y menú de navegación según el rol del usuario conectado.
-│   ├── footer.php                 ← Pie de página común y cierre de etiquetas.
-│   ├── login.php                  ← Formulario de inicio de sesión.
-│   ├── registro.php               ← Formulario público para que nuevos pacientes creen su cuenta.
-│   ├── paciente/
-│   │   ├── agendar.php            ← Formulario con selección de médico, fecha y chips de horas libres.
-│   │   ├── mis_citas.php          ← Tabla de citas del paciente con insignias de estado y cancelación.
-│   │   ├── ticket.php             ← Comprobante digital con código de barras CODE_128 imprimible.
-│   │   └── mis_recetas.php        ← Listado de recetas emitidas al paciente.
-│   ├── recepcion/
-│   │   ├── control_llegada.php    ← Pantalla con cursor enfocado para escáner láser y botón de ingreso.
-│   │   └── citas_dia.php          ← Agenda semanal interactiva con selector AJAX de Lunes a Domingo.
-│   ├── medico/
-│   │   ├── agenda.php             ← Agenda de citas asignadas al especialista con filtro de fecha y estado.
-│   │   ├── atencion.php           ← Ficha clínica con antecedentes del paciente y campo de diagnóstico.
-│   │   ├── receta_form.php        ← Formulario dinámico para prescribir medicamentos (+/- filas).
-│   │   └── receta_imprimible.php  ← Formato oficial de receta con membrete, firma y código de barras.
-│   └── reportes/
-│       ├── citas.php              ← Reporte unificado de citas médicas (general o por rango de fechas).
-│       └── historial_paciente.php ← Reporte de historial clínico filtrable por cédula de paciente.
-├── assets/
+├── index.php                      # Enrutador frontal (Front Controller): recibe ?ruta=... y despacha al controlador
+├── config/                        # Configuraciones centrales del sistema
+│   ├── conexion.php               # Conexión singleton a MySQL mediante PDO (base: consultorio_dbw)
+│   └── sesion.php                 # Manejador de sesiones, control de acceso por rol y helpers flash
+├── controllers/                   # Controladores (Capa de Negocio y Coordinación)
+│   ├── AuthController.php         # Autenticación, control de accesos, registro de pacientes y logout
+│   ├── PacienteController.php     # Gestión de citas, consulta de horarios ocupados, tickets y recetas
+│   ├── RecepcionController.php    # Control de llegada con escáner láser, validación de turnos y agenda semanal
+│   ├── MedicoController.php       # Agenda del especialista, atención clínica, diagnóstico y prescripción
+│   └── ReporteController.php      # Control de reportes de citas e historiales médicos
+├── models/                        # Modelos (Capa de Datos y Consultas SQL con PDO)
+│   ├── Usuario.php                # Gestión de cuentas de usuario y verificación de credenciales con BCRYPT
+│   ├── Cliente.php                # Información personal de pacientes vinculados por cédula
+│   ├── Especialista.php           # Catálogo de médicos especialistas y especialidades
+│   ├── Cita.php                   # Agendamiento, verificación de solapamiento de horarios y cambios de estado
+│   ├── HistorialClinico.php       # Registro y consulta de diagnósticos clínicos y notas de evolución
+│   └── Receta.php                 # Registro de prescripciones farmacológicas y detalle de medicamentos
+├── views/                         # Vistas (Capa de Presentación HTML5 / PHP)
+│   ├── header.php                 # Cabecera HTML, topbar de navegación adaptativa por rol y mensajes flash
+│   ├── footer.php                 # Pie de página institucional y cierre de estructura
+│   ├── login.php                  # Pantalla de inicio de sesión dividida (Split-Screen) con logo SmartMed
+│   ├── registro.php               # Formulario público de auto-registro para pacientes
+│   ├── paciente/                  # Vistas específicas del portal del paciente
+│   │   ├── agendar.php            # Selección de médico, selector de fecha y franjas horarias interactivas
+│   │   ├── mis_citas.php          # Tabla de citas agendadas con insignias de estado y cancelación
+│   │   ├── mis_recetas.php        # Listado de recetas emitidas al paciente logueado
+│   │   └── ticket.php             # Comprobante digital con código de barras CODE_128 listo para imprimir
+│   ├── recepcion/                 # Vistas del módulo de recepción
+│   │   ├── control_llegada.php    # Pantalla auto-enfocada para lector de código de barras o digitación
+│   │   └── citas_dia.php          # Agenda semanal interactiva con selector AJAX de Lunes a Domingo
+│   ├── medico/                    # Vistas del módulo médico
+│   │   ├── agenda.php             # Agenda de citas asignadas al especialista en sesión
+│   │   ├── atencion.php           # Ficha clínica: historial previo, diagnóstico obligatorio y prescripción
+│   │   ├── receta_form.php        # Formulario dinámico para prescripción médica estructurada
+│   │   └── receta_imprimible.php  # Hoja oficial de receta médica con código de barras y firma
+│   └── reportes/                  # Vistas de auditoría y reportes institucionales
+│       ├── cabecera_reporte.php   # Cabecera superior institucional unificada (#0F4C81)
+│       ├── citas.php              # Reporte interactivo de citas médicas con enlace a Dompdf
+│       ├── historial_paciente.php # Consulta de expediente clínico por paciente con enlace a Dompdf
+│       ├── reporte_dompdf.php     # Controlador de renderizado y streaming oficial de PDF con Dompdf
+│       └── dompdf/                # Librería Dompdf empaquetada con sus fuentes y autoloaders
+├── database/                      # Scripts SQL para despliegue y datos iniciales
+│   ├── schema.sql                 # Estructura DDL: tablas, llaves primarias, foráneas e índices optimizados
+│   ├── triggers.sql               # Disparadores de sincronización automática entre usuarios y clientes
+│   └── seed.sql                   # Datos semilla: especialistas, usuarios de prueba, citas y recetas demo
+├── assets/                        # Recursos estáticos del sistema
+│   ├── logo.png                   # Logotipo oficial de SmartMed Web
 │   ├── css/
-│   │   └── estilos.css            ← Único archivo de estilos con paleta clínica (#0F4C81) e impresión.
+│   │   └── estilos.css            # Hoja de estilos unificada (paleta clínica, componentes y @media print)
 │   ├── js/
-│   │   ├── validaciones.js        ← Filtro en tiempo real para impedir letras en cédula y teléfono.
-│   │   ├── paciente.js            ← Dibuja el código de barras del ticket y consulta horarios libres por AJAX.
-│   │   ├── recepcion.js           ← Mantiene el cursor en el escáner láser y actualiza la semana por AJAX.
-│   │   └── medico.js              ← Controla el doble clic de la agenda y filas dinámicas de medicamentos.
+│   │   ├── validaciones.js        # Filtro de solo dígitos en tiempo real para cédulas y teléfonos
+│   │   ├── paciente.js            # Lógica AJAX de horarios libres y renderizado del ticket
+│   │   ├── recepcion.js           # Enfoque persistente del escáner y actualización semanal AJAX
+│   │   ├── medico.js              # Interacción de agenda y prescripción farmacológica
+│   │   └── JsBarcode.all.min.js   # Librería para generación de códigos de barra CODE_128
 │   └── img/
-│       └── logo.svg               ← Isotipo del consultorio médico en formato vectorial.
-├── database/
-│   ├── schema.sql                 ← Estructura de tablas, llaves foráneas e índices en MySQL (consultorio_dbw).
-│   ├── triggers.sql               ← Trigger para sincronizar automáticamente usuarios y pacientes.
-│   └── seed.sql                   ← Datos iniciales con médicos especialistas y usuarios de prueba.
-└── README.md                      ← Guía explicativa para la defensa y exposición del proyecto.
+│       ├── logo.png               # Logotipo secundario en mapa de bits
+│       └── logo.svg               # Isotipo vectorial de la cruz médica
+└── README.md                      # Documentación técnica completa para sustentación
 ```
 
 ---
 
-## 2. Tabla de Equivalencias (NetBeans Swing → Versión Web)
+## 3. Tabla de Equivalencias (Java NetBeans Swing → PHP MVC Web)
 
-| Aplicación de Escritorio (NetBeans / Java) | Versión Web Simplificada (PHP / JS) | Función Principal |
+Para facilitar la sustentación y defensa ante el jurado, se detalla la equivalencia directa entre los componentes clásicos de escritorio y su implementación web actual:
+
+| Componente Escritorio (Java / Swing) | Módulo Web Equivalente (PHP / JS) | Propósito y Funcionamiento |
 | :--- | :--- | :--- |
-| `ConexionBD.java` | `config/conexion.php` | Conexión con PDO a la base `consultorio_dbw`. |
-| `Sesion.java` | `config/sesion.php` | Almacena y valida el usuario activo y su rol. |
-| `Login.java` | `controllers/AuthController.php`<br>`views/login.php` | Inicio de sesión con contraseñas hasheadas. |
-| *(NUEVA función web)* | `views/registro.php` | Formulario de auto-registro de pacientes. |
-| `Login.java (consultas SQL)` | `models/Usuario.php` | Usuario.php — en NetBeans esta consulta estaba dentro de Login.java. |
-| `ClienteDAO.java` | `models/Cliente.php` | Consultas SQL de la tabla `clientes`. |
-| `EspecialistaDAO.java` | `models/Especialista.php` | Consultas SQL de médicos y especialidades. |
-| `CitaDAO.java` | `models/Cita.php` | Consultas de reservas, validación de turnos y estados. |
-| `VistaPaciente.java` | `controllers/PacienteController.php`<br>`views/paciente/agendar.php` | Formulario de reserva y consulta de citas. |
-| `TicketDigita.java` | `views/paciente/ticket.php` | Ticket con código de barras CODE_128 (JsBarcode). |
-| `VistaRecepcion.java` | `controllers/RecepcionController.php`<br>`views/recepcion/control_llegada.php` | Escaneo láser y paso de la cita a *En Proceso*. |
-| *(NUEVA función web)* | `views/recepcion/citas_dia.php` | Pestañas de Lunes a Domingo con conteo por AJAX. |
-| `VistaMedico.java` | `controllers/MedicoController.php`<br>`views/medico/agenda.php` | Lista de pacientes citados para el especialista. |
-| `PanelHistorialMedico.java` | `models/HistorialClinico.php`<br>`views/medico/atencion.php` | Historial previo y registro del diagnóstico. |
-| *(NUEVA función web)* | `models/Receta.php`<br>`views/medico/receta_form.php` | Prescripción dinámica de fármacos y dosis. |
-| `GestorReportes.java` | `controllers/ReporteController.php`<br>`views/reportes/citas.php` | Vistas web nativas optimizadas para imprimir. |
-| Estilos / Look & Feel | `assets/css/estilos.css` | Diseño médico con variables en `:root`. |
+| `ConexionBD.java` | `config/conexion.php` | Conexión a la base de datos `consultorio_dbw` mediante `PDO`. |
+| `Sesion.java` | `config/sesion.php` | Control de sesión activa, verificación de roles (`requerirRol`) y datos de usuario. |
+| `Login.java` | `controllers/AuthController.php`<br>`views/login.php` | Autenticación de credenciales seguras con `password_verify` y diseño Split-Screen. |
+| *(Nueva funcionalidad web)* | `views/registro.php` | Registro autónomo para que pacientes creen su cuenta sin intervención de recepción. |
+| `ClienteDAO.java` | `models/Cliente.php` | Consultas SQL de pacientes por cédula, ID interno o ID de usuario. |
+| `EspecialistaDAO.java` | `models/Especialista.php` | Consultas y listados de médicos especialistas activos y sus áreas médicas. |
+| `CitaDAO.java` | `models/Cita.php` | Transacciones de reserva de turnos, verificación de horas ocupadas y estados. |
+| `VistaPaciente.java` | `controllers/PacienteController.php`<br>`views/paciente/agendar.php` | Selección interactiva de médico, fecha y chips de horas libres en tiempo real. |
+| `TicketDigita.java` | `views/paciente/ticket.php` | Comprobante digital con código de barras CODE_128 generado con `JsBarcode`. |
+| `VistaRecepcion.java` | `controllers/RecepcionController.php`<br>`views/recepcion/control_llegada.php` | Lectura de ticket por escáner láser para cambio de estado a *En Proceso*. |
+| *(Nueva funcionalidad web)* | `views/recepcion/citas_dia.php` | Tablero semanal de Lunes a Domingo con carga dinámica por AJAX. |
+| `VistaMedico.java` | `controllers/MedicoController.php`<br>`views/medico/agenda.php` | Agenda médica filtrada exclusivamente para el médico especialista en sesión. |
+| `PanelHistorialMedico.java` | `models/HistorialClinico.php`<br>`views/medico/atencion.php` | Expediente clínico, registro del diagnóstico médico y bloqueo en citas finalizadas. |
+| *(Nueva funcionalidad web)* | `models/Receta.php`<br>`views/medico/receta_imprimible.php` | Prescripción farmacológica en texto libre y emisión de receta electrónica con código. |
+| `GestorReportes.java` | `controllers/ReporteController.php`<br>`views/reportes/reporte_dompdf.php` | Auditoría de citas e historial clínico con exportación oficial a PDF vía Dompdf. |
 
 ---
 
-## 3. Cómo Funciona una Petición en 5 Pasos
+## 4. Arquitectura MVC y Flujo por Rol
 
-1. **El usuario hace clic o envía un formulario:** El navegador envía la petición al servidor (ejemplo: `index.php?ruta=paciente/agendar`).
-2. **`index.php` recibe la ruta:** Inicia la sesión, lee el parámetro `$_GET['ruta']` y mediante un `switch` ejecuta el controlador y método correspondiente.
-3. **El Controlador procesa la lógica:** Verifica los permisos del rol mediante `requerirRol()`, recibe y valida los datos recibidos por POST o GET.
-4. **El Modelo ejecuta el SQL:** El controlador llama a las funciones del modelo (ejemplo: `Cita::guardarCita`), el cual ejecuta consultas preparadas con PDO (`?`) protegiendo la base de datos contra inyecciones SQL.
-5. **La Vista muestra el resultado:** El controlador incluye la vista correspondiente (ejemplo: `views/paciente/agendar.php`), la cual se renderiza entre `views/header.php` y `views/footer.php` mostrando la información al usuario.
+El sistema utiliza un patrón **Front Controller** donde todas las peticiones convergen en `index.php`:
 
-### Mapa de Rutas de `index.php` (Todas verificadas)
-- `login` → `AuthController::login`
-- `registro` → `AuthController::registro`
-- `logout` → `AuthController::logout`
-- `paciente/agendar` → `PacienteController::agendar`
-- `paciente/citas` → `PacienteController::misCitas`
-- `paciente/ticket` → `PacienteController::verTicket`
-- `paciente/cancelar` → `PacienteController::cancelar`
-- `paciente/recetas` → `PacienteController::misRecetas`
-- `api/horarios-ocupados` → `PacienteController::horariosOcupados` (AJAX)
-- `recepcion/control` → `RecepcionController::controlLlegada`
-- `recepcion/validar` → `RecepcionController::validarTicket`
-- `recepcion/ingresar` → `RecepcionController::ingresarCita`
-- `recepcion/citas_dia` → `RecepcionController::citasDia`
-- `api/citas-dia` → `RecepcionController::citasDiaAjax` (AJAX)
-- `medico/agenda` → `MedicoController::agenda`
-- `medico/atencion` → `MedicoController::atencion`
-- `medico/receta` → `MedicoController::recetaForm`
-- `medico/receta_guardar` → `MedicoController::guardarReceta`
-- `medico/receta_imprimible` → `MedicoController::verReceta`
-- `reportes/citas` → `ReporteController::citas`
-- `reportes/historial` → `ReporteController::historial`
+```text
+[ Cliente (Navegador Web) ]
+           │
+           ▼
+     [ index.php ] (Front Controller)
+           │
+   Verifica sesión y rol (config/sesion.php)
+           │
+           ▼
+ [ Controlador (controllers/) ]
+      │               ▲
+      │ Llama método  │ Retorna datos
+      ▼               │
+  [ Modelo (models/) ] ──► [ MySQL (consultorio_dbw) ]
+      │
+      ▼
+ [ Vista (views/) ] ──► [ HTML + CSS + JS Renderizado ]
+```
+
+### Mapa Completo de Rutas en `index.php`
+
+* **Autenticación:**
+  * `index.php?ruta=login` → `AuthController::login()`
+  * `index.php?ruta=registro` → `AuthController::registro()`
+  * `index.php?ruta=logout` → `AuthController::logout()`
+* **Portal del Paciente:**
+  * `index.php?ruta=paciente/agendar` → `PacienteController::agendar()`
+  * `index.php?ruta=paciente/citas` → `PacienteController::misCitas()`
+  * `index.php?ruta=paciente/ticket&id={id}` → `PacienteController::verTicket()`
+  * `index.php?ruta=paciente/cancelar&id={id}` → `PacienteController::cancelar()`
+  * `index.php?ruta=paciente/recetas` → `PacienteController::misRecetas()`
+  * `index.php?ruta=api/horarios-ocupados` → `PacienteController::horariosOcupados()` *(Respuesta JSON vía AJAX)*
+* **Portal de Recepción:**
+  * `index.php?ruta=recepcion/control` → `RecepcionController::controlLlegada()`
+  * `index.php?ruta=recepcion/validar` → `RecepcionController::validarTicket()`
+  * `index.php?ruta=recepcion/ingresar` → `RecepcionController::ingresarCita()`
+  * `index.php?ruta=recepcion/citas_dia` → `RecepcionController::citasDia()`
+  * `index.php?ruta=api/citas-dia` → `RecepcionController::citasDiaAjax()` *(Respuesta JSON vía AJAX)*
+* **Portal del Médico Especialista:**
+  * `index.php?ruta=medico/agenda` → `MedicoController::agenda()`
+  * `index.php?ruta=medico/atencion&id={id}` → `MedicoController::atencion()`
+  * `index.php?ruta=medico/receta&id={id}` → `MedicoController::recetaForm()`
+  * `index.php?ruta=medico/receta_guardar` → `MedicoController::guardarReceta()`
+  * `index.php?ruta=medico/receta_imprimible&id={id}` → `MedicoController::verReceta()`
+* **Módulo de Reportes Oficiales y Auditoría:**
+  * `index.php?ruta=reportes/citas` → `ReporteController::citas()`
+  * `index.php?ruta=reportes/historial` → `ReporteController::historial()`
+  * `index.php?ruta=reportes/pdf` → Carga directa de `views/reportes/reporte_dompdf.php`
 
 ---
 
-## 4. Flujo de Estados de una Cita Médica y Generación de Recetas
+## 5. Reglas de Negocio Implementadas
+
+### A. Franjas Horarias de Agendamiento
+El sistema implementa dos turnos diarios divididos en intervalos fijos de **30 minutos**:
+* **Turno de Mañana:** Desde las **07:00** hasta las **12:00** (`07:00`, `07:30`, `08:00`, `08:30`, `09:00`, `09:30`, `10:00`, `10:30`, `11:00`, `11:30`, `12:00`).
+* **Turno de Tarde:** Desde las **13:30** hasta las **19:00** (`13:30`, `14:00`, `14:30`, `15:00`, `15:30`, `16:00`, `16:30`, `17:00`, `17:30`, `18:00`, `18:30`, `19:00`).
+* **Control de Disponibilidad Asíncrona:** Cuando el paciente selecciona fecha y médico, el frontend consulta `api/horarios-ocupados` vía AJAX; los turnos ya reservados por ese médico quedan deshabilitados en pantalla impidiendo el solapamiento de turnos.
+
+### B. Ciclo de Vida y Estados de la Cita Médica
 
 ```text
 [ PACIENTE AGENDAR ] 
-        │ 
-        ▼
-   ( Pendiente ) ──(Paciente cancela cita)──► [ Cancelada ] (Libera horario)
-        │
-(Recepción escanea código de barras o valida a mano)
-        │
-        ▼
-  ( En Proceso ) ──(Médico atiende y guarda diagnóstico)──► [ Finalizada ] (Cita atendida)
-        │                                                         │
-        └───────► [ SE PUEDE GENERAR RECETA MÉDICA ] ◄────────────┘
+         │ 
+         ▼
+    ( Pendiente ) ──(Paciente cancela cita)──► [ Cancelada ] (Libera horario en agenda)
+         │
+(Recepción escanea ticket o valida código)
+         │
+         ▼
+   ( En Proceso ) ──(Médico guarda atención)──► [ Finalizada ] (Cita cerrada y bloqueada)
+         │                                            │
+         └────────► [ SE EMITE RECETA MÉDICA ] ◄──────┘
 ```
 
-- **`Pendiente`:** La cita fue creada por el paciente. Puede ser cancelada libremente por el paciente antes de la fecha. **No se puede emitir receta**.
-- **`En Proceso`:** El paciente llegó al consultorio y recepción confirmó su asistencia. El médico ya puede atenderlo. **Aquí ya se puede emitir la receta médica** durante la consulta.
-- **`Finalizada`:** El médico completó la atención y registró el diagnóstico obligatorio en una transacción atómica. La cita queda cerrada. **También se puede emitir o reimprimir la receta médica** si es necesario.
-- **`Cancelada`:** Borrado lógico (`cancelada_en = NOW()`) que libera el horario del médico para que otro paciente pueda reservarlo. **No se puede emitir receta**.
+* **`Pendiente`:** Cita creada por el paciente. Puede ser cancelada libremente por el paciente antes de su realización (libera el cupo en la agenda). No permite emisión de recetas.
+* **`En Proceso`:** Marcada cuando recepción valida el ticket digital (vía lector de código de barras o digitación manual). Indica que el paciente está físicamente en la sala de espera y habilita al médico para iniciar la consulta.
+* **`Finalizada`:** Marcada cuando el especialista atiende al paciente y registra el diagnóstico clínico. La cita queda cerrada definitivamente.
+* **`Cancelada`:** Borrado lógico (`cancelada_en = NOW()`) que preserva la auditoría histórica y libera inmediatamente el horario para otros pacientes.
 
-> **Resumen de la regla:** La receta médica se puede generar tanto cuando la cita está **`En Proceso`** (durante la atención de la consulta médica) como cuando ya ha sido **`Finalizada`** (no se puede emitir en citas `Pendiente` ni `Cancelada`).
+### C. Consulta Clínica y Prescripción en Texto Libre
+* **Diagnóstico Obligatorio:** En `views/medico/atencion.php`, el médico debe ingresar de manera obligatoria la evaluación médica del paciente.
+* **Prescripción Integrada en Texto Libre:** El médico dispone de un área de prescripción farmacológica flexible donde puede redactar medicamentos y posología en texto libre (ej. *"Tomar Paracetamol 500mg cada 8 horas por 3 días"*), además de indicaciones generales o cuidados dietéticos.
+* **Almacenamiento Automatizado:** El controlador procesa el texto, registra la receta en la tabla `recetas` y genera un código oficial único (ej. `REC-20261110-1001`), descomponiendo además los medicamentos en `receta_medicamentos`.
 
----
+### D. Bloqueo Estricto de Edición en Citas Finalizadas
+* Cuando una cita adquiere el estado **`Finalizada`**, la interfaz médica de atención se transforma en **modo de solo lectura**.
+* Se despliega un banner de seguridad con ícono de candado (🔒): *"No se puede editar porque esta cita ya finalizó"*.
+* Todos los campos de texto (`diagnostico`, `notas`, `prescripcion`, `indicaciones`) se bloquean mediante el atributo `disabled`, impidiendo alteraciones no autorizadas y garantizando la integridad legal del historial médico.
+* Permanece habilitado el botón para consultar y reimprimir la receta médica emitida.
 
-## 5. Cómo Crear un Médico o Recepcionista
+### E. Filtro por Rol en Agenda y Reportes
+* **Médico Especialista:** Al ingresar a **Mi Agenda** o al **Reporte de Citas**, el sistema detecta su cédula en sesión y filtra la consulta SQL por su `id_especialista`. El médico **únicamente visualiza sus citas asignadas**, protegiendo la confidencialidad entre especialistas.
+* **Recepción / Administración:** Tienen una visión **global** de todas las citas del consultorio para control de flujo de pacientes, asistencia y auditoría general.
+* **Seguridad en Recetas:** Un paciente solo puede visualizar o imprimir recetas médicas asociadas a su propia cédula/ID de cliente. Si intenta acceder al ID de una receta ajena, el sistema bloquea la petición y redirige con mensaje de acceso denegado.
 
-En SmartMed Web, el formulario público de registro está destinado exclusivamente para que los **pacientes** creen su propia cuenta (con rol fijo `paciente`).
-
-Los **médicos** y el personal de **recepción** no se auto-registran desde la web; se crean directamente en el archivo `database/seed.sql`:
-
-1. Abra `database/seed.sql` con cualquier editor de texto.
-2. Para un **recepcionista**, agregue una fila en el `INSERT INTO usuarios`:
-   ```sql
-   INSERT INTO usuarios (usuario, password, rol, cedula, nombre, telefono, activo) VALUES
-   ('recepcion2', '$2y$10$W29.UQJok5GGSqvb/17WTesuD8OvPvYowFJBlR1w0QrWn6jwACexu', 'recepcion', '1700000099', 'Recepcionista Tarde', '0990000099', 1);
-   ```
-3. Para un **médico especialista**, se registran dos cosas con la **misma cédula**:
-   - En la tabla `especialistas`:
-     ```sql
-     INSERT INTO especialistas (nombre_completo, especialidad, cedula) VALUES
-     ('Dr. Manuel Soria', 'Dermatología', '1755667788');
-     ```
-   - En la tabla `usuarios` (con rol `'medico'`):
-     ```sql
-     INSERT INTO usuarios (usuario, password, rol, cedula, nombre, telefono, activo) VALUES
-     ('dr_soria', '$2y$10$WueNFitTFZxrywRYG8mgouim17T4Ml1FXsr14LBDll0BIUnJ1d2ni', 'medico', '1755667788', 'Dr. Manuel Soria', '0990000088', 1);
-     ```
-4. Las contraseñas se guardan hasheadas con BCRYPT mediante la función nativa de PHP `password_hash('tu_clave', PASSWORD_BCRYPT)`.
+### F. Generación Oficial de Reportes en PDF con Dompdf
+* La generación de reportes oficiales se centraliza en `views/reportes/reporte_dompdf.php`.
+* Se eliminaron los botones antiguos de impresión de ventana (`window.print`) en los reportes, consolidando a **Dompdf** como la única vía oficial para exportar:
+  * **Reporte de Citas:** Filtrable por rango de fechas (desde/hasta) y restringido automáticamente al médico en sesión si aplica.
+  * **Expediente de Historial Clínico:** Filtrable por cédula de paciente con histórico de diagnósticos y evoluciones.
+  * **Recetas Médicas Oficiales:** Con datos del paciente, médico, medicamentos, indicaciones y código de emisión.
+* Los PDFs se generan con cabecera azul marino institucional (`#0F4C81`), tipografía Unicode `DejaVu Sans` y streaming directo al navegador.
 
 ---
 
-## 6. Instalación en XAMPP y Usuarios de Prueba
+## 6. Instalación y Configuración Local en XAMPP
 
-### Instalación Rápida
-1. Copie la carpeta `Consultorio Medico Web` dentro de `C:\xampp\htdocs\`.
-2. En el panel de XAMPP inicie **Apache** y **MySQL**.
-3. En **phpMyAdmin** (`http://localhost/phpmyadmin/`), importe en la pestaña **Importar** los tres archivos en este orden (el script `schema.sql` crea automáticamente la base de datos `consultorio_dbw` limpia):
-   1. `database/schema.sql` (crea la base `consultorio_dbw`, tablas e índices con cédula UNIQUE).
-   2. `database/triggers.sql` (crea el trigger que sincroniza usuarios sin duplicar médicos ni alterar su especialidad).
-   3. `database/seed.sql` (inserta los 4 médicos especialistas, usuarios y citas demo).
-4. Abra su navegador e ingrese a:
-   ```text
-   http://localhost/Consultorio%20Medico%20Web/index.php
-   ```
+### Paso 1: Ubicación de los Archivos
+Clone o copie la carpeta del proyecto dentro del directorio raíz de su servidor web Apache:
+```text
+C:\xampp\htdocs\Consultorio Medico Web\
+```
 
-### Usuarios Demo para la Exposición (Un médico por cada especialista)
+### Paso 2: Iniciar Servicios
+Abra el panel de control de **XAMPP** e inicie los módulos:
+* **Apache** (servidor web)
+* **MySQL** (motor de base de datos)
 
-| Rol | Usuario | Contraseña | Médico / Especialidad | Cédula | Pantalla Inicial |
+### Paso 3: Importar la Base de Datos en phpMyAdmin
+Ingrese a `http://localhost/phpmyadmin/` y en la pestaña **Importar** cargue los tres archivos de la carpeta `database/` en este **orden estricto**:
+1. `database/schema.sql` (crea la base de datos `consultorio_dbw`, tablas con llaves foráneas e índices).
+2. `database/triggers.sql` (crea el trigger `trg_sincronizar_usuario_after_insert` para sincronización de perfiles).
+3. `database/seed.sql` (inserta los especialistas, cuentas demo de prueba y citas de ejemplo).
+
+### Paso 4: Verificación de Conexión
+El archivo `config/conexion.php` viene preconfigurado con los valores predeterminados de XAMPP:
+```php
+$servidor = '127.0.0.1';
+$baseDatos = 'consultorio_dbw';
+$usuario = 'root';
+$clave = '';
+```
+*(Modifique estos valores únicamente si su instalación local de MySQL utiliza contraseña o un puerto diferente).*
+
+### Paso 5: Ingreso al Sistema
+Abra su navegador web e ingrese a la dirección:
+```text
+http://localhost/Consultorio%20Medico%20Web/index.php
+```
+
+---
+
+## 7. Cuentas de Acceso Demo para la Sustentación
+
+Todas las contraseñas del entorno de pruebas se encuentran encriptadas mediante `PASSWORD_BCRYPT`:
+
+| Rol del Usuario | Usuario | Contraseña | Especialidad / Identificación | Cédula | Ruta de Entrada |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Recepción** | `recepcion` | `recepcion123` | Recepción Principal | `1700000002` | `index.php?ruta=recepcion/control` |
+| **Recepción** | `recepcion` | `recepcion123` | Recepción Central | `1700000002` | `index.php?ruta=recepcion/control` |
 | **Médico 1** | `dr_gomez` | `medico123` | Dr. Roberto Gómez &bull; *Cardiología* | `1711223344` | `index.php?ruta=medico/agenda` |
 | **Médico 2** | `dra_ortiz` | `medico123` | Dra. Carmen Ortiz &bull; *Medicina General* | `1722334455` | `index.php?ruta=medico/agenda` |
 | **Médico 3** | `dra_paredes` | `medico123` | Dra. Valeria Paredes &bull; *Pediatría* | `1733445566` | `index.php?ruta=medico/agenda` |
 | **Médico 4** | `dr_andrade` | `medico123` | Dr. Esteban Andrade &bull; *Traumatología* | `1744556677` | `index.php?ruta=medico/agenda` |
-| **Paciente** | `juan_perez` | `paciente123` | Juan Pérez (Paciente) | `1799887766` | `index.php?ruta=paciente/agendar` |
+| **Paciente Demo** | `juan_perez` | `paciente123` | Juan Pérez (Paciente) | `1799887766` | `index.php?ruta=paciente/agendar` |
+
+> **Nota:** Para crear pacientes adicionales, cualquier persona puede utilizar el botón **"¿No tiene cuenta? Regístrese aquí"** en la pantalla de inicio de sesión (`index.php?ruta=registro`).
+
+---
+
+## 8. Flujo de Trabajo y Ramas Git
+
+El repositorio sigue un esquema estructurado de control de versiones con **Conventional Commits**:
+
+* **`main`:** Rama principal que contiene la versión base inicial estable del proyecto. Permanece intacta para preservar el estado de referencia original.
+* **`develop`:** Rama activa de desarrollo e integración continua donde se implementan todas las funcionalidades, mejoras de experiencia de usuario, auditorías de seguridad y correcciones.
+
+### Estándar de Mensajes de Commit Utilizado:
+* `feat(...)`: Incorporación de nuevas funciones (ej. agendamiento interactivo, reportes Dompdf).
+* `fix(...)`: Corrección de errores o validaciones de sesión (ej. resolución de funciones indefinidas y permisos).
+* `style(...)`: Mejoras estéticas y diseño de interfaz (ej. pantalla Split-Screen y cabeceras unificadas).
+* `refactor(...)`: Reestructuración de código sin alterar el comportamiento funcional.
+* `docs(...)`: Actualizaciones en documentación técnica y manuales (`README.md`).
