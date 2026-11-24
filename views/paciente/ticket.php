@@ -49,14 +49,14 @@ $fechaFormato = date('d/m/Y H:i', strtotime($cita['fecha_cita']));
     </div>
 
     <!-- Código de barras CODE_128 modo C escaneable por lector láser -->
-    <div class="ticket-codigo-box" style="text-align: center; padding: 15px; background: #ffffff; border-radius: 8px;">
+    <div class="ticket-codigo-box">
         <svg id="barcode" data-codigo="<?= htmlspecialchars($cita['codigo_barras'], ENT_QUOTES, 'UTF-8') ?>"></svg>
         <!-- Código completo legible debajo del código de barras en fuente monoespaciada -->
         <div style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 700; letter-spacing: 2px; margin-top: 6px; color: #0F172A;">
             <?= htmlspecialchars($cita['codigo_barras'], ENT_QUOTES, 'UTF-8') ?>
         </div>
         <p style="font-size: 0.8rem; color:#64748B; margin-top:6px;">
-            Presente este código en recepción al llegar al consultorio.
+            Presente este comprobante en recepción al llegar al consultorio.
         </p>
     </div>
 </div>
