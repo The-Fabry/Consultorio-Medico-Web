@@ -1122,8 +1122,140 @@ a:hover {
 }
 
 /* =============================================================================
-   14. ESTILOS DE IMPRESIÓN OFICIAL Y FIEL (@media print)
+   14. CABECERA UNIFICADA DE REPORTES Y ESTILOS DE IMPRESIÓN (@media print)
    ============================================================================= */
+/* Cabecera Azul Marino Estandarizada para Reportes e Impresiones */
+.cabecera-reporte-unificada {
+    background: linear-gradient(135deg, #0F355C 0%, #0F4C81 100%);
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(15, 76, 129, 0.12);
+    border: 1px solid #1E40AF;
+    box-sizing: border-box;
+}
+
+.cabecera-reporte-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cabecera-reporte-info {
+    flex: 1;
+    min-width: 280px;
+}
+
+.cabecera-reporte-marca {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.cabecera-reporte-logo-simbolo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #0284C7;
+    color: #FFFFFF;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 900;
+}
+
+.cabecera-reporte-marca-nombre {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #BAE6FD;
+}
+
+.cabecera-reporte-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 0.8px;
+}
+
+.cabecera-reporte-titulo {
+    color: #FFFFFF;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin: 0 0 4px 0;
+}
+
+.cabecera-reporte-subtitulo {
+    color: #E0F2FE;
+    font-size: 0.88rem;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.cabecera-reporte-contexto {
+    background: rgba(255, 255, 255, 0.12);
+    border-left: 3px solid #38BDF8;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #F0F9FF;
+    display: inline-block;
+}
+
+.cabecera-reporte-meta {
+    text-align: right;
+}
+
+.cabecera-reporte-caja-meta {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: right;
+}
+
+.cabecera-reporte-fila-meta {
+    font-size: 0.8rem;
+}
+
+.cabecera-reporte-lbl {
+    color: #BAE6FD;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    margin-right: 4px;
+}
+
+.cabecera-reporte-val {
+    color: #FFFFFF;
+}
+
+.cabecera-reporte-codigo {
+    background: #0F172A;
+    color: #38BDF8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.82rem;
+}
+
+.cabecera-reporte-seguridad {
+    margin-top: 5px;
+    font-size: 0.68rem;
+    color: #94A3B8;
+    letter-spacing: 0.5px;
+}
+
 @media print {
     /* Forzar impresión de colores exactos y fondos en todos los navegadores */
     * {
@@ -1144,14 +1276,14 @@ a:hover {
     }
 
     @page {
-        margin: 1.2cm auto;
+        margin: 1cm auto;
         size: auto;
     }
 
     body {
         background: #FFFFFF !important;
         color: #0F172A !important;
-        font-size: 11pt;
+        font-size: 10pt;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -1160,9 +1292,33 @@ a:hover {
         margin: 0 auto !important;
         padding: 0 !important;
         max-width: 100% !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: flex-start !important;
+        display: block !important;
+    }
+
+    /* Cabecera unificada en modo impresión */
+    .cabecera-reporte-unificada {
+        background: #0F355C !important;
+        color: #FFFFFF !important;
+        border-radius: 6px !important;
+        padding: 14px 18px !important;
+        margin-bottom: 16px !important;
+        border: 1px solid #0F172A !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .cabecera-reporte-titulo {
+        color: #FFFFFF !important;
+        font-size: 1.25rem !important;
+    }
+
+    .cabecera-reporte-subtitulo {
+        color: #E0F2FE !important;
+    }
+
+    .cabecera-reporte-contexto {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: #FFFFFF !important;
     }
 
     /* Ticket Digital Imprimible: Conserva fielmente el diseño, colores y bordes */
