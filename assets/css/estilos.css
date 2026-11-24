@@ -658,28 +658,28 @@ a:hover {
     line-height: 1.55;
 }
 
-/* Bloque amigable de prescripción farmacológica en texto libre */
+/* Bloque limpio y profesional de prescripción farmacológica en texto libre */
 .bloque-prescripcion {
     margin-top: 18px;
     padding: 18px 20px;
-    background: #F0FDF4;
-    border: 1.5px solid #BBF7D0;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.04);
+    box-shadow: 0 1px 3px rgba(15, 76, 129, 0.03);
 }
 
 .bloque-prescripcion-cabecera {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
     gap: 8px;
 }
 
 .bloque-prescripcion-titulo {
     margin: 0;
-    color: #166534;
+    color: var(--color-primario);
     font-size: 0.98rem;
     font-weight: 700;
     display: flex;
@@ -688,27 +688,24 @@ a:hover {
 }
 
 .bloque-prescripcion-ayuda {
-    color: #15803D;
-    font-size: 0.83rem;
-    margin-bottom: 12px;
-    line-height: 1.45;
+    display: none;
 }
 
-/* Textarea de prescripción con tipografía cómoda y limpia */
+/* Textarea de prescripción con tipografía cómoda, limpia y bordes neutros */
 .prescripcion-textarea {
     background: #FFFFFF;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 0.92rem;
     line-height: 1.5;
-    border: 1.5px solid #86EFAC;
+    border: 1px solid #CBD5E1;
     border-radius: 8px;
     padding: 10px 12px;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .prescripcion-textarea:focus {
-    border-color: #22C55E;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.12);
     outline: none;
 }
 
