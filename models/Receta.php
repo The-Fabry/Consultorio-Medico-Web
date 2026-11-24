@@ -95,5 +95,64 @@ class Receta {
         $stmt->execute([$idReceta]);
         return $stmt->fetchAll();
     }
+
+    // Busca una receta asociada directamente a una cita médica.
+    // Recibe: id_cita. Devuelve: datos de la receta con sus medicamentos o null.
+    public function buscarPorCita(int $idCita): ?array {
+        $sql = "SELECT r.*, e.nombre_completo AS nombre_especialista, e.especialidad
+                FROM recetas r
+                INNER JOIN especialistas e ON r.id_especialista = e.id_especialista
+                WHERE r.id_cita = ? LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$idCita]);
+        $receta = $stmt->fetch();
+
+        if ($receta) {
+            $receta['medicamentos'] = $this->listarMedicamentos((int) $receta['id_receta']);
+        }
+        return $receta ?: null;
+    }
+
+    // Actualiza las indicaciones y reemplaza los medicamentos de una receta existente.
+    // Usa una transacción PDO para asegurar consistencia (si falla uno, no se guarda nada).
+    public function actualizarConMedicamentos(int $idReceta, ?string $indicaciones, array $medicamentos): bool {
+        try {
+            $this->pdo->beginTransaction();
+
+            // 1. Actualizar indicaciones generales de la receta
+            $stmt = $this->pdo->prepare("UPDATE recetas SET indicaciones = ? WHERE id_receta = ?");
+            $stmt->execute([$indicaciones, $idReceta]);
+
+            // 2. Eliminar medicamentos previos para reemplazarlos con la nueva prescripción
+            $stmtDel = $this->pdo->prepare("DELETE FROM receta_medicamentos WHERE id_receta = ?");
+            $stmtDel->execute([$idReceta]);
+
+            // 3. Insertar la nueva lista de medicamentos
+            $stmtMed = $this->pdo->prepare(
+                "INSERT INTO receta_medicamentos (id_receta, medicamento, dosis, frecuencia, duracion, via_administracion)
+                 VALUES (?, ?, ?, ?, ?, ?)"
+            );
+            foreach ($medicamentos as $med) {
+                $nombreMed = trim($med['medicamento'] ?? '');
+                if ($nombreMed === '') {
+                    continue; // Omitir líneas vacías
+                }
+                $stmtMed->execute([
+                    $idReceta,
+                    $nombreMed,
+                    $med['dosis'] ?? 'Según indicación',
+                    $med['frecuencia'] ?? 'Ver posología',
+                    $med['duracion'] ?? 'Tratamiento',
+                    $med['via_administracion'] ?? 'Oral'
+                ]);
+            }
+
+            $this->pdo->commit();
+            return true;
+        } catch (\PDOException $e) {
+            $this->pdo->rollBack();
+            return false;
+        }
+    }
 }
 
