@@ -602,14 +602,126 @@ a:hover {
 /* =============================================================================
    13. MÓDULO MÉDICO Y RECETA OFICIAL
    ============================================================================= */
+/* Contenedor de ancho medio centrado para la vista de atención médica */
+.contenedor-atencion {
+    max-width: 980px;
+    margin: 0 auto;
+    width: 100%;
+}
+
 .atencion-grilla {
     display: grid;
     grid-template-columns: 1fr 1.25fr;
-    gap: 20px;
+    gap: 22px;
+    align-items: start;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 880px) {
     .atencion-grilla { grid-template-columns: 1fr; }
+}
+
+/* Tarjeta clínica suave y moderna para la atención */
+.tarjeta-atencion {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(15, 76, 129, 0.04);
+    padding: 22px 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.tarjeta-atencion:hover {
+    box-shadow: 0 6px 20px rgba(15, 76, 129, 0.07);
+}
+
+/* Encabezado suave de tarjeta con badge integrado */
+.atencion-tarjeta-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-primario);
+    font-size: 1.12rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #F1F5F9;
+}
+
+/* Ficha del paciente con tonos celestes clínicos */
+.paciente-ficha {
+    background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+/* Bloque amigable de prescripción farmacológica en texto libre */
+.bloque-prescripcion {
+    margin-top: 18px;
+    padding: 18px 20px;
+    background: #F0FDF4;
+    border: 1.5px solid #BBF7D0;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.04);
+}
+
+.bloque-prescripcion-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bloque-prescripcion-titulo {
+    margin: 0;
+    color: #166534;
+    font-size: 0.98rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bloque-prescripcion-ayuda {
+    color: #15803D;
+    font-size: 0.83rem;
+    margin-bottom: 12px;
+    line-height: 1.45;
+}
+
+/* Textarea de prescripción con tipografía cómoda y limpia */
+.prescripcion-textarea {
+    background: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    border: 1.5px solid #86EFAC;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.prescripcion-textarea:focus {
+    border-color: #22C55E;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+    outline: none;
+}
+
+/* Barra de acciones finales en la consulta */
+.acciones-atencion {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1.5px solid #E2E8F0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .hoja-receta {
