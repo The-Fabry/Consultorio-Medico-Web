@@ -131,6 +131,10 @@ switch ($ruta) {
         (new ReporteController())->historial();
         break;
 
+    case 'reportes/pdf':
+        require_once __DIR__ . '/views/reportes/reporte_dompdf.php';
+        break;
+
     // Si la ruta escrita en la URL no existe en la lista
     default:
         http_response_code(404);
