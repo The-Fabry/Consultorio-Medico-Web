@@ -6,10 +6,10 @@
  * Equivale en NetBeans a: Sesion.java
  */
 
-// Inicia la sesión de PHP si aún no se ha iniciado.
+// Inicia la sesión de PHP si aún no se ha iniciado y las cabeceras HTTP no se han enviado.
 // Recibe: nada. Devuelve: void.
 function iniciarSesion(): void {
-    if (session_status() === PHP_SESSION_NONE) {
+    if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
         session_start();
     }
 }
