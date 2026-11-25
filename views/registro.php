@@ -8,7 +8,7 @@
 require_once __DIR__ . '/header.php';
 ?>
 
-<div class="tarjeta-auth" style="max-width: 520px;">
+<div class="tarjeta-auth" style="max-width: 520px; width: 100%;">
     <div class="auth-cabecera">
         <h2>Crear Cuenta de Paciente</h2>
         <p>Complete sus datos personales para agendar sus citas médicas</p>

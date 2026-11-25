@@ -44,6 +44,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden; /* Previene desplazamiento horizontal accidental en móviles */
+    -webkit-text-size-adjust: 100%;
 }
 
 a {
@@ -1854,4 +1856,424 @@ select.control-agendar {
     font-size: 1rem;
     font-weight: 700;
     border-radius: 10px;
+}
+
+/* =============================================================================
+   15. ADAPTACIÓN RESPONSIVA INTEGRAL (MOBILE-FIRST & TABLET)
+   Para la defensa: Este bloque centraliza las reglas @media query para que toda
+   la aplicación (navegación, split login, formularios, fichas médicas, reportes,
+   tickets y tablas) sea 100% responsiva y táctil en celulares (<= 768px y <= 480px).
+   ============================================================================= */
+
+/* Contenedor flexible para cabeceras con botones en pantallas móviles */
+.cabecera-seccion-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* Acciones táctiles para el comprobante de cita */
+.ticket-acciones-botones {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Pantallas medianas y tablets (<= 992px) */
+@media (max-width: 992px) {
+    .atencion-grilla {
+        grid-template-columns: 1fr;
+    }
+    .agendar-layout-grid {
+        grid-template-columns: 1fr;
+    }
+    .agendar-columna-lateral {
+        position: static;
+        margin-top: 18px;
+    }
+}
+
+/* Pantallas móviles y celulares (<= 768px) */
+@media (max-width: 768px) {
+    /* 1. Contenedor principal con espaciado móvil ergonómico */
+    .contenedor-principal {
+        padding: 12px 14px;
+    }
+
+    /* 2. Barra de navegación superior adaptada a móvil */
+    .topbar-clinica {
+        padding: 10px 14px;
+        gap: 8px 10px;
+    }
+
+    .topbar-logo {
+        order: 1;
+        font-size: 1.05rem;
+    }
+
+    .topbar-usuario {
+        order: 2;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
+
+    .topbar-usuario span:first-child {
+        max-width: 110px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    /* Menú en fila deslizable táctil (estilo tabs móviles nativos) */
+    .topbar-nav {
+        order: 3;
+        width: 100%;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 0 2px 0;
+    }
+
+    .topbar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .topbar-nav a {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .topbar-nav a:hover,
+    .topbar-nav a:active {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-salir {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+        min-height: 32px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* 3. Prevenir zoom automático indeseado en inputs en iOS Safari */
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    select,
+    textarea,
+    .campo-control,
+    .login-input {
+        font-size: 16px !important;
+    }
+
+    /* 4. Botones con área táctil cómoda (mínimo 42px en móvil) */
+    .btn {
+        min-height: 42px;
+        padding: 9px 16px;
+        font-size: 0.9rem;
+    }
+
+    .btn-sm {
+        min-height: 36px;
+        padding: 6px 12px;
+        font-size: 0.82rem;
+    }
+
+    /* 5. Tarjetas y formularios generales */
+    .tarjeta {
+        padding: 16px 14px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+
+    .tarjeta-cabecera {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tarjeta-cabecera h2,
+    .tarjeta-cabecera h3 {
+        font-size: 1.15rem;
+    }
+
+    .fila-campos {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* 6. Tablas con desplazamiento táctil horizontal suave */
+    .tabla-responsive {
+        border-radius: 10px;
+        margin-bottom: 14px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tabla-clinica {
+        min-width: 580px; /* Asegura que las columnas conserven su estructura legible en scroll */
+        font-size: 0.86rem;
+    }
+
+    .tabla-clinica th,
+    .tabla-clinica td {
+        padding: 9px 10px;
+    }
+
+    /* 7. Banner y formulario de agendamiento */
+    .banner-agendar-bienvenida {
+        padding: 14px 16px;
+        gap: 12px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+
+    .banner-icono-saludo {
+        font-size: 1.8rem;
+    }
+
+    .banner-agendar-bienvenida h2 {
+        font-size: 1.15rem;
+    }
+
+    .banner-agendar-bienvenida p {
+        font-size: 0.82rem;
+    }
+
+    .tarjeta-formulario-agendar {
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
+
+    .formulario-titulo {
+        font-size: 1.18rem;
+    }
+
+    .tarjeta-resumen-flotante {
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
+
+    .btn-confirmar-agendar {
+        min-height: 48px;
+        font-size: 1rem;
+    }
+
+    /* 8. Módulo de Atención Médica */
+    .tarjeta-atencion {
+        padding: 16px 14px;
+        border-radius: 12px;
+    }
+
+    .atencion-tarjeta-titulo {
+        font-size: 1.02rem;
+        margin-bottom: 12px;
+    }
+
+    .acciones-atencion {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .acciones-atencion .btn {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    /* 9. Módulo de Recepción */
+    .caja-escaner {
+        padding: 20px 14px;
+    }
+
+    .caja-escaner form > div {
+        flex-direction: column !important;
+        align-items: stretch;
+    }
+
+    .caja-escaner form .btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .resumen-grilla {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .resumen-caja {
+        padding: 12px 10px;
+    }
+
+    .resumen-num {
+        font-size: 1.4rem;
+    }
+
+    .resumen-lbl {
+        font-size: 0.76rem;
+    }
+
+    /* 10. Cabecera y acciones de reportes */
+    .cabecera-reporte-unificada {
+        padding: 16px 14px;
+        border-radius: 10px;
+    }
+
+    .cabecera-reporte-info {
+        min-width: 100%;
+    }
+
+    .cabecera-reporte-titulo {
+        font-size: 1.25rem;
+    }
+
+    .cabecera-reporte-meta {
+        width: 100%;
+    }
+
+    .cabecera-reporte-caja-meta {
+        width: 100%;
+        text-align: left;
+    }
+
+    .reportes-barra-acciones {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 14px;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .btn-reporte-pdf {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    /* Formularios de filtros en tarjetas */
+    .no-print form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .no-print form input,
+    .no-print form select,
+    .no-print form button,
+    .no-print form a.btn {
+        width: 100% !important;
+        min-height: 40px;
+    }
+
+    /* 11. Hoja de Receta y Ticket */
+    .hoja-receta {
+        padding: 18px 14px;
+        margin-bottom: 16px;
+        border-radius: 12px;
+    }
+
+    .receta-paciente-banner {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .receta-firma-seccion {
+        margin-top: 30px;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        text-align: center;
+    }
+
+    .receta-firma-linea {
+        width: 100%;
+        max-width: 240px;
+    }
+
+    .tarjeta-ticket {
+        margin: 10px auto;
+        border-radius: 12px;
+        width: 100%;
+    }
+
+    .ticket-cabecera {
+        padding: 16px 12px;
+    }
+
+    .ticket-cuerpo {
+        padding: 16px 14px;
+    }
+
+    .ticket-fila {
+        font-size: 0.85rem;
+    }
+
+    .ticket-codigo-box {
+        padding: 12px 8px;
+    }
+
+    .ticket-acciones-botones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ticket-acciones-botones .btn {
+        width: 100%;
+    }
+}
+
+/* D. Pantallas extra pequeñas / celulares compactos (<= 480px) */
+@media (max-width: 480px) {
+    .login-split-contenedor {
+        margin: 8px auto;
+        padding: 0 6px;
+    }
+
+    .login-split-tarjeta {
+        border-radius: 14px;
+    }
+
+    .login-panel-marca {
+        padding: 20px 14px;
+    }
+
+    .login-logo-img {
+        max-width: 125px;
+    }
+
+    .login-marca-titulo {
+        font-size: 1.4rem;
+    }
+
+    .login-panel-formulario {
+        padding: 22px 14px;
+    }
+
+    .tarjeta-auth {
+        margin: 10px auto;
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
 }
