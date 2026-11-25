@@ -177,10 +177,11 @@ class MedicoController {
     }
 
     // Muestra el formulario para prescribir medicamentos a una cita atendida.
-    // Redirige a la sección integrada dentro de la atención médica.
+    // Para la defensa: La prescripción se integró directamente en atencion.php (texto libre),
+    // por lo que este método redirige de forma transparente a la sección integrada de la cita.
     public function recetaForm(): void {
         requerirRol('medico');
-        $idCita = (int)($_GET['id_cita'] ?? 0);
+        $idCita = (int)($_GET['id'] ?? $_GET['id_cita'] ?? 0);
         header('Location: index.php?ruta=medico/atencion&id=' . $idCita . '#seccion-receta');
         exit;
     }

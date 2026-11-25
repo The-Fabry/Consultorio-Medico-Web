@@ -55,7 +55,6 @@ Consultorio Medico Web/
 │   ├── medico/                    # Vistas del módulo médico
 │   │   ├── agenda.php             # Agenda de citas asignadas al especialista en sesión
 │   │   ├── atencion.php           # Ficha clínica: historial previo, diagnóstico obligatorio y prescripción
-│   │   ├── receta_form.php        # Formulario dinámico para prescripción médica estructurada
 │   │   └── receta_imprimible.php  # Hoja oficial de receta médica con código de barras y firma
 │   └── reportes/                  # Vistas de auditoría y reportes institucionales
 │       ├── cabecera_reporte.php   # Cabecera superior institucional unificada (#0F4C81)

@@ -1,7 +1,7 @@
 /**
  * medico.js
- * Para qué sirve: Controla el doble clic de la agenda, la adición dinámica de medicamentos y el código de receta.
- * Trabaja con: views/medico/agenda.php, views/medico/receta_form.php y views/medico/receta_imprimible.php.
+ * Para qué sirve: Controla el doble clic de la agenda médica y el renderizado del código de barras de la receta.
+ * Trabaja con: views/medico/agenda.php, views/medico/atencion.php y views/medico/receta_imprimible.php.
  * Equivale en NetBeans a: DefaultTableModel y eventos de botones en VistaMedico.java.
  */
 
