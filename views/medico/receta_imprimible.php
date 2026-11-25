@@ -22,7 +22,8 @@ if ($usuarioSesion) {
     } elseif ($usuarioSesion['rol'] === 'medico') {
         $urlRetorno = 'index.php?ruta=medico/agenda';
     } elseif ($usuarioSesion['rol'] === 'recepcion') {
-        $urlRetorno = 'index.php?ruta=recepcion/citas';
+        // Redirección a la agenda diaria de recepción (ruta válida definida en index.php)
+        $urlRetorno = 'index.php?ruta=recepcion/citas_dia';
     }
 }
 ?>
