@@ -29,7 +29,7 @@ if ($usuarioSesion) {
 ?>
 
 <!-- Botones de navegación (ocultos al imprimir) -->
-<div class="no-print" style="max-width:760px; margin:0 auto 16px; display:flex; justify-content:space-between; align-items:center;">
+<div class="no-print" style="max-width:760px; margin:0 auto 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
     <a href="<?= $urlRetorno ?>" class="btn btn-secundario btn-sm">◀ Volver</a>
     <button type="button" class="btn btn-primario btn-sm" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
 </div>

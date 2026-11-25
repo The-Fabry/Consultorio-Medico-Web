@@ -8,7 +8,7 @@
 require_once __DIR__ . '/../header.php';
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:12px;">
+<div class="cabecera-seccion-flex">
     <div>
         <h2 style="color:var(--color-primario); margin:0 0 4px 0;">Mi Agenda Médica</h2>
         <p style="color:#64748B; font-size:0.9rem; margin:0;">
@@ -21,8 +21,8 @@ require_once __DIR__ . '/../header.php';
     <a href="index.php?ruta=medico/agenda" class="btn btn-secundario">🔄 Actualizar Agenda</a>
 </div>
 
-<!-- Filtros de búsqueda -->
-<div class="tarjeta" style="padding: 14px; margin-bottom: 16px;">
+<!-- Filtros de búsqueda (ocultos al imprimir) -->
+<div class="tarjeta no-print" style="padding: 14px; margin-bottom: 16px;">
     <form action="index.php" method="GET" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
         <input type="hidden" name="ruta" value="medico/agenda">
 

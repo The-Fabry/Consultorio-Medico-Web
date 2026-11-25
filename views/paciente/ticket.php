@@ -69,7 +69,7 @@ $fechaEmisionTicket = date('d/m/Y H:i');
     </div>
 </div>
 
-<div class="no-print" style="text-align:center; margin-top: 18px;">
+<div class="ticket-acciones-botones no-print">
     <a href="index.php?ruta=paciente/citas" class="btn btn-secundario">Volver a Mis Citas</a>
     <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir Ticket</button>
 </div>

@@ -9,12 +9,12 @@ require_once __DIR__ . '/../header.php';
 $hoy = date('Y-m-d');
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+<div class="cabecera-seccion-flex">
     <div>
         <h2 style="color:var(--color-primario);">Agenda de Citas del Día</h2>
         <p style="color:#64748B; font-size:0.9rem;">Consulte las citas programadas y confirme la llegada de pacientes</p>
     </div>
-    <div style="display:flex; gap:10px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <a href="index.php?ruta=recepcion/control" class="btn btn-secundario">🔍 Control por Escáner</a>
         <button type="button" class="btn btn-primario" onclick="window.print()">🖨 Imprimir</button>
     </div>
